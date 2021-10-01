@@ -1,0 +1,49 @@
+{
+  "name": "Product detail page",
+  "slug": "product",
+  "description": "Page displaying a single product",
+  "model": "products",
+  "fields": [
+    {
+      "id": "product_benefits",
+      "label": "Product benefits",
+      "type": "collection",
+      "fields": [
+        {
+          "id": "icon",
+          "label": "Icon",
+          "type": "icon",
+          "required": true
+        },
+        {
+          "id": "text",
+          "label": "Benefit text",
+          "type": "text",
+          "required": true,
+          "localized": true
+        }
+      ],
+      "default": [
+        {
+          "icon": "uil:truck",
+          "text": "Free US shipping on all orders over $100"
+        },
+        {
+          "icon": "uil:clock-two",
+          "text": "Free returns up to 30 days"
+        },
+        {
+          "icon": "uil:award",
+          "text": "98% customer satisfaction rating"
+        }
+      ]
+    },
+    {
+      "id": "enable_social_sharing",
+      "label": "Enable social sharing",
+      "type": "toggle"
+    }
+  ],
+  "source_type": "theme",
+  "source_id": "origin"
+}
