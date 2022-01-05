@@ -1,6 +1,8 @@
 name: Deploy to Layer0
 
-on: push
+on:
+  workflow_dispatch:
+  push:
 
 jobs:
   deploy-to-layer0:
