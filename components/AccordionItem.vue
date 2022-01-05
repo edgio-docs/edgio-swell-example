@@ -1,7 +1,10 @@
 <template>
   <div class="border-b border-primary-med">
     <div :class="{ container: useContainer }">
-      <div class="flex flex-row items-center z-10 cursor-pointer" @click="toggleExpanded()">
+      <div
+        class="flex flex-row items-center z-10 cursor-pointer"
+        @click="toggleExpanded()"
+      >
         <strong class="py-3 text-md">{{ heading }}</strong>
         <div
           class="ml-auto transition-all transition-fast ease-in-out"
@@ -12,7 +15,7 @@
       </div>
 
       <HeightExpansion>
-        <div v-if="isExpanded">
+        <div v-show="isExpanded">
           <slot />
         </div>
       </HeightExpansion>

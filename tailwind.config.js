@@ -1,11 +1,6 @@
-const map = require('lodash/map')
-
 module.exports = {
   mode: 'jit',
   purge: {
-    /* options: {
-      safelist: ['container', /^icon:/, /^bg-/],
-    }, */
     content: ['./tailwind-safelist.txt'],
   },
   theme: {
@@ -172,13 +167,15 @@ module.exports = {
   },
   plugins: [
     function ({ addUtilities, config, e }) {
-      const rotateUtilities = map(config('theme.rotate'), (value, key) => {
-        return {
-          [`.${e(`rotate-${key}`)}`]: {
-            transform: `rotate(${value})`,
-          },
+      const rotateUtilities = Object.entries(config('theme.rotate')).map(
+        ([key, value]) => {
+          return {
+            [`.${e(`rotate-${key}`)}`]: {
+              transform: `rotate(${value})`,
+            },
+          }
         }
-      })
+      )
 
       addUtilities(rotateUtilities, ['hover'])
     },

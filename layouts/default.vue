@@ -19,11 +19,14 @@
     <TheCookieNotification />
     <TheCart v-show="cartIsActive" />
     <TheSearch v-if="searchIsActive" @click-close="searchIsActive = false" />
+    <QuickViewPopup
+      v-if="quickViewIsVisible"
+      :product-id="quickViewProductId"
+    />
   </div>
 </template>
 
 <script>
-// Helpers
 import { mapState } from 'vuex'
 
 export default {
@@ -44,21 +47,25 @@ export default {
           async: true,
           body: true,
         },
+      ],
+      link: [
         {
-          type: 'text/javascript',
-          innerHTML: this.$swell.settings.get('scripts.global.head'),
-        },
-        {
-          type: 'text/javascript',
-          innerHTML: this.$swell.settings.get('scripts.global.body'),
-          body: true,
+          rel: 'preconnect',
+          href: process.env.cdnHost,
+          crossorigin: true,
         },
       ],
     }
   },
 
   computed: {
-    ...mapState(['cartIsActive', 'notification', 'cookiesWereAccepted']),
+    ...mapState([
+      'cartIsActive',
+      'notification',
+      'cookiesWereAccepted',
+      'quickViewIsVisible',
+      'quickViewProductId',
+    ]),
   },
 
   watch: {

@@ -4,7 +4,7 @@
       <!-- Breadcrumb -->
       <NuxtLink
         :to="localePath('/account/subscriptions/')"
-        class="flex items-center cursor-pointer mb-6"
+        class="flex items-center mb-6 cursor-pointer"
       >
         <BaseIcon icon="uil:angle-left" size="sm" /><span class="ml-1">
           {{ $t('account.subscriptions.id.backToSubscriptions') }}
@@ -14,15 +14,15 @@
 
     <!-- Fetch loader -->
     <div v-if="$fetchState.pending" class="container">
-      <div class="loader-el w-1/3 h-7 mb-6" />
-      <div class="loader-el w-3/5 h-2 mb-4" />
-      <div class="loader-el w-2/5 h-2 mb-8" />
+      <div class="w-1/3 mb-6 loader-el h-7" />
+      <div class="w-3/5 h-2 mb-4 loader-el" />
+      <div class="w-2/5 h-2 mb-8 loader-el" />
     </div>
 
     <div v-else>
       <div class="container pb-10 border-b border-primary-med">
-        <div class="pb-6 border-b border-primary-med mb-6">
-          <h2 class="text-2xl pb-6">
+        <div class="pb-6 mb-6 border-b border-primary-med">
+          <h2 class="pb-6 text-2xl">
             {{ subscription.product.name }}
           </h2>
 
@@ -40,15 +40,17 @@
 
         <!-- Plan items -->
         <template v-if="planItems">
-          <span class="label-xs-bold-faded">{{ $t('account.subscriptions.id.planItems') }}</span>
+          <span class="label-xs-bold-faded">{{
+            $t('account.subscriptions.id.planItems')
+          }}</span>
 
           <div class="mb-6 md:grid md:grid-cols-2 md:col-gap-4">
             <div
               v-for="(item, index) in planItems"
               :key="`plan-item-${index}`"
-              class="w-full flex py-6 border-b border-primary-light"
+              class="flex w-full py-6 border-b border-primary-light"
             >
-              <div class="min-w-26 mr-6">
+              <div class="mr-6 min-w-26">
                 <VisualMedia :source="selectThumbnail(item)" sizes="120px" />
               </div>
 
@@ -76,29 +78,48 @@
         </template>
 
         <template v-else>
-          <span class="label-xs-bold-faded">{{ $t('account.subscriptions.id.plan') }}</span>
+          <span class="label-xs-bold-faded">{{
+            $t('account.subscriptions.id.plan')
+          }}</span>
 
           <div class="mb-6 md:grid md:grid-cols-2 md:col-gap-4">
-            <div class="w-full flex py-6 border-b border-primary-light">
+            <div class="flex w-full py-6 border-b border-primary-light">
               <div
-                v-if="subscription.variant.images && subscription.variant.images.length"
-                class="min-w-26 mr-6"
+                v-if="
+                  subscription.variant &&
+                  subscription.variant.images &&
+                  subscription.variant.images.length
+                "
+                class="mr-6 min-w-26"
               >
-                <VisualMedia :source="subscription.variant.images[0].file" sizes="120px" />
+                <VisualMedia
+                  :source="subscription.variant.images[0].file"
+                  sizes="120px"
+                />
               </div>
 
               <div
-                v-else-if="subscription.product.images && subscription.product.images.length"
-                class="min-w-26 mr-6"
+                v-else-if="
+                  subscription.product &&
+                  subscription.product.images &&
+                  subscription.product.images.length
+                "
+                class="mr-6 min-w-26"
               >
-                <VisualMedia :source="subscription.product.images[0].file" sizes="120px" />
+                <VisualMedia
+                  :source="subscription.product.images[0].file"
+                  sizes="120px"
+                />
               </div>
 
               <div>
                 <h4 class="pb-2">
                   {{ subscription.product.name }}
                 </h4>
-                <p v-if="subscription.quantity > 1" class="text-sm text-primary-darker">
+                <p
+                  v-if="subscription.quantity > 1"
+                  class="text-sm text-primary-darker"
+                >
                   {{
                     $tc('account.orders.id.quantity', subscription.quantity, {
                       count: subscription.quantity,
@@ -117,26 +138,46 @@
           </div>
         </template>
 
-        <div class="bg-primary-lightest rounded shadow-md">
-          <div class="p-4" :class="{ 'border-b border-primary-med': status !== 'canceled' }">
+        <div class="rounded shadow-md bg-primary-lightest">
+          <div
+            class="p-4"
+            :class="{ 'border-b border-primary-med': status !== 'canceled' }"
+          >
             <div class="flex pb-2">
               <span>{{ $t('account.subscriptions.id.planTotal') }}</span>
               <span class="ml-auto">
-                {{ formatMoney(subscription.recurringTotal, subscription.currency) }}</span
+                {{
+                  formatMoney(
+                    subscription.recurringTotal,
+                    subscription.currency
+                  )
+                }}</span
               >
             </div>
 
-            <div v-for="item in subscription.items" :key="item.id" class="flex pb-2">
+            <div
+              v-for="item in subscription.items"
+              :key="item.id"
+              class="flex pb-2"
+            >
               <span>{{ item.description }}</span>
-              <span class="ml-auto"> {{ formatMoney(item.price, subscription.currency) }}</span>
+              <span class="ml-auto">
+                {{ formatMoney(item.price, subscription.currency) }}</span
+              >
             </div>
 
-            <div v-if="subscriptionOrder.subscriptionDelivery" class="flex pb-2">
+            <div
+              v-if="subscriptionOrder && subscriptionOrder.subscriptionDelivery"
+              class="flex pb-2"
+            >
               <span>{{ $t('account.subscriptions.id.shipping') }}</span>
               <span class="ml-auto">{{
                 subscriptionOrder.shipmentPrice === 0
                   ? $t('account.subscriptions.id.freeShipping')
-                  : formatMoney(subscriptionOrder.shipmentPrice, subscriptionOrder.currency)
+                  : formatMoney(
+                      subscriptionOrder.shipmentPrice,
+                      subscriptionOrder.currency
+                    )
               }}</span>
             </div>
 
@@ -153,11 +194,15 @@
               <BaseIcon icon="uil:calender" size="sm" class="mr-2" />
               <p v-if="status === 'trial'">
                 {{ $t('account.subscriptions.id.trialEnds') }}
-                <span class="label-sm-bold">{{ formatDate(subscription.dateTrialEnd) }}</span>
+                <span class="label-sm-bold">{{
+                  formatDate(subscription.dateTrialEnd)
+                }}</span>
               </p>
               <p v-else-if="status === 'active'">
                 {{ $t('account.subscriptions.id.nextOrder') }}
-                <span class="label-sm-bold">{{ formatDate(subscription.datePeriodEnd) }}</span>
+                <span class="label-sm-bold">{{
+                  formatDate(subscription.datePeriodEnd)
+                }}</span>
               </p>
             </div>
 
@@ -171,11 +216,13 @@
 
             <BaseButton
               v-if="status !== 'canceled' && allowPlanEdit"
-              class="w-full block mt-6"
+              class="block w-full mt-6"
               fit="auto"
               appearance="dark"
               :label="$t('account.subscriptions.id.editPlan')"
-              :link="localePath(`/account/subscriptions/${subscription.id}/edit/`)"
+              :link="
+                localePath(`/account/subscriptions/${subscription.id}/edit/`)
+              "
             />
           </div>
         </div>
@@ -184,24 +231,27 @@
       <div class="container pt-4">
         <!-- Delivery details -->
         <template v-if="shipping">
-          <p class="text-base font-semibold pb-4">
+          <p class="pb-4 text-base font-semibold">
             {{ $t('account.subscriptions.id.deliveryDetails') }}
           </p>
 
           <div class="mb-8">
-            <div class="rounded text-sm border border-primary-med p-4">
-              <p class="font-semibold pb-2">
+            <div class="p-4 text-sm border rounded border-primary-med">
+              <p class="pb-2 font-semibold">
                 {{ $t('account.subscriptions.id.deliveryAddress') }}
               </p>
               <p>
                 {{ shipping.name }}<br />
-                {{ shipping.address2 }} {{ shipping.address1 }}, {{ shipping.city }}
-                {{ shipping.zip }}<br />
+                {{ shipping.address2 }} {{ shipping.address1 }},
+                {{ shipping.city }} {{ shipping.zip }}<br />
                 {{ shipping.state }} {{ shipping.country }}
               </p>
             </div>
-            <div v-if="shipping.phone" class="rounded text-sm border border-primary-med p-4 -mt-px">
-              <p class="font-semibold pb-2">
+            <div
+              v-if="shipping.phone"
+              class="p-4 -mt-px text-sm border rounded border-primary-med"
+            >
+              <p class="pb-2 font-semibold">
                 {{ $t('account.subscriptions.id.phoneNumber') }}
               </p>
               <p>
@@ -210,15 +260,17 @@
             </div>
             <div
               v-if="shipping && shipping.service"
-              class="rounded text-sm border border-primary-med p-4 -mt-px"
+              class="p-4 -mt-px text-sm border rounded border-primary-med"
             >
-              <p class="font-semibold pb-2">
+              <p class="pb-2 font-semibold">
                 {{ $t('account.subscriptions.id.deliveryMethod') }}
               </p>
               <p v-if="shipping.serviceName">
                 {{ shipping.serviceName }}
                 <span v-if="shipping.price">
-                  ({{ formatMoney(shipping.price, subscriptionOrder.currency) }})
+                  ({{
+                    formatMoney(shipping.price, subscriptionOrder.currency)
+                  }})
                 </span>
               </p>
             </div>
@@ -236,31 +288,43 @@
 
         <!-- Payment details -->
         <div class="mb-8">
-          <p class="text-base font-semibold pb-4">
+          <p class="pb-4 text-base font-semibold">
             {{ $t('account.subscriptions.id.paymentMethod') }}
           </p>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 rounded border border-primary-med">
+          <div
+            class="
+              grid grid-cols-1
+              border
+              rounded
+              md:grid-cols-2
+              border-primary-med
+            "
+          >
             <!-- Method: Card -->
             <div
-              v-if="billing.card"
-              class="md:border-b-0 md:border-r border-b border-primary-med p-4"
+              v-if="billing && billing.card"
+              class="p-4 border-b md:border-b-0 md:border-r border-primary-med"
             >
               <div class="flex mb-0 md:mb-4">
-                <BrandCardIcon :brand="billing.card.brand" class="pr-4 md:pr-0" />
+                <BrandCardIcon
+                  :brand="billing.card.brand"
+                  class="pr-4 md:pr-0"
+                />
 
-                <span class="ml-0 md:ml-auto pr-4 md:pl-4 text-sm font-semibold">{{
-                  billing.card.brand
-                }}</span>
+                <span
+                  class="pr-4 ml-0 text-sm font-semibold md:ml-auto md:pl-4"
+                  >{{ billing.card.brand }}</span
+                >
 
-                <div class="text-base md:hidden ml-auto">
+                <div class="ml-auto text-base md:hidden">
                   <span class="tracking-large">····</span>
                   <span>&nbsp;{{ billing.card.last4 }}</span>
                   <span class="ml-6">{{ cardExpDate }}</span>
                 </div>
               </div>
 
-              <div class="hidden md:flex mb-4">
+              <div class="hidden mb-4 md:flex">
                 <div class="text-base">
                   <span class="tracking-large">···· ····</span>
                   <span>&nbsp;{{ billing.card.last4 }}</span>
@@ -270,15 +334,15 @@
               </div>
             </div>
 
-            <div v-if="billing" class="flex md:text-sm p-4">
+            <div v-if="billing" class="flex p-4 md:text-sm">
               <div>
-                <p class="font-semibold pb-2">
+                <p class="pb-2 font-semibold">
                   {{ $t('account.subscriptions.id.billingAddress') }}
                 </p>
                 <p>
                   {{ billing.name }}<br />
-                  {{ billing.address2 }} {{ billing.address1 }}, {{ billing.city }} {{ billing.zip
-                  }}<br />
+                  {{ billing.address2 }} {{ billing.address1 }},
+                  {{ billing.city }} {{ billing.zip }}<br />
                   {{ billing.state }} {{ billing.country }}<br />
                   {{ billing.phone }}
                 </p>
@@ -286,7 +350,7 @@
 
               <button
                 v-if="status !== 'canceled'"
-                class="px-2 ml-auto mt-auto"
+                class="px-2 mt-auto ml-auto"
                 @click="editBillingAddressPopupIsActive = true"
               >
                 {{ $t('account.subscriptions.id.editBillingAddress') }}
@@ -297,9 +361,12 @@
       </div>
 
       <!-- Pause/resume subscription -->
-      <div v-if="pausable" class="container border-t border-b border-primary-med">
+      <div
+        v-if="pausable"
+        class="container border-t border-b border-primary-med"
+      >
         <div class="py-10">
-          <p class="text-base font-semibold pb-4">
+          <p class="pb-4 text-base font-semibold">
             {{
               status === 'paused'
                 ? $t('account.subscriptions.id.resume.title')
@@ -333,7 +400,7 @@
       <div class="container">
         <!-- Orders -->
         <div v-if="orders" class="mb-10">
-          <p class="text-base font-semibold pt-10 pb-4">
+          <p class="pt-10 pb-4 text-base font-semibold">
             {{ $t('account.subscriptions.id.orders') }}
           </p>
 
@@ -344,8 +411,10 @@
             append
             class="flex w-full md:w-1/2"
           >
-            <span class="label-sm-bold">{{ formatDate(order.dateCreated) }}</span>
-            <span class="label-sm ml-auto">#{{ order.number }}</span>
+            <span class="label-sm-bold">{{
+              formatDate(order.dateCreated)
+            }}</span>
+            <span class="ml-auto label-sm">#{{ order.number }}</span>
           </NuxtLink>
         </div>
 
@@ -447,9 +516,12 @@ export default {
     const { $swell } = this
 
     // Fetch subscription
-    const subscription = await this.$swell.subscriptions.get(this.$route.params.id, {
-      expand: ['product', 'variant', 'orders'],
-    })
+    const subscription = await this.$swell.subscriptions.get(
+      this.$route.params.id,
+      {
+        expand: ['product', 'variant', 'orders'],
+      }
+    )
 
     // Show 404 if subscription data isn't found
     if (!subscription) {
@@ -458,12 +530,20 @@ export default {
 
     // Set component data
     this.subscription = subscription
-    this.allowPlanEdit = $swell.settings.get('account.subscriptions.allowPlanEdit', true)
+    this.allowPlanEdit = await $swell.settings.get(
+      'account.subscriptions.allowPlanEdit',
+      true
+    )
     // Fetch subscription settings
     const {
-      features: { pauseIndefinitely, pauseSkipNext, pauseDuringTrial, pausePastDue },
+      features: {
+        pauseIndefinitely,
+        pauseSkipNext,
+        pauseDuringTrial,
+        pausePastDue,
+      },
       pauseNextSkipThreshold,
-    } = this.$swell.settings.subscriptions()
+    } = await this.$swell.settings.subscriptions()
 
     // Set component data
     this.pauseIndefinitely = pauseIndefinitely
@@ -472,7 +552,9 @@ export default {
     this.pausePastDue = pausePastDue
 
     if (subscription.orderId) {
-      const subscriptionOrder = await $swell.account.getOrder(subscription.orderId)
+      const subscriptionOrder = await $swell.account.getOrder(
+        subscription.orderId
+      )
       if (subscriptionOrder) this.subscriptionOrder = subscriptionOrder
     }
 
@@ -500,7 +582,10 @@ export default {
     pausable() {
       switch (this.status) {
         case 'active':
-          return this.pauseIndefinitely || (this.pauseSkipNext && this.cycleSkippable)
+          return (
+            this.pauseIndefinitely ||
+            (this.pauseSkipNext && this.cycleSkippable)
+          )
         case 'trial':
           return this.pauseDuringTrial
         case 'pastdue':
@@ -552,7 +637,7 @@ export default {
         return item.variant.images[0].file
       }
 
-      if (item.product.images.length) {
+      if (item.product && item.product.images && item.product.images.length) {
         return item.product.images[0].file
       }
 
@@ -617,7 +702,9 @@ export default {
           })
 
           this.$store.dispatch('showNotification', {
-            message: this.$t('account.subscriptions.id.popup.pause.skipCycleSuccess'),
+            message: this.$t(
+              'account.subscriptions.id.popup.pause.skipCycleSuccess'
+            ),
             type: 'success',
           })
         } else {

@@ -20,7 +20,9 @@
         <p>{{ value.name }}</p>
 
         <div class="flex items-center ml-auto">
-          <span v-if="value.price" class="mr-2">+{{ formatMoney(value.price, currency) }}</span>
+          <span v-if="value.price" class="mr-2"
+            >+{{ formatMoney(value.price, currency) }}</span
+          >
           <div class="indicator ml-auto">
             <BaseIcon icon="uil:check" size="sm" class="text-primary-lighter" />
           </div>

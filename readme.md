@@ -1,16 +1,12 @@
 # Deploy Swell Origin Theme to Layer0
 
-A demo of swell integration with Layer0.
-
-## Try It Now
-
-[![Deploy with Layer0](https://docs.layer0.co/button.svg)](https://app.layer0.co/deploy?repo=https://github.com/layer0-docs/layer0-swell)
+A demo of Swell integration with Nuxt.js and Layer0.
 
 ## Getting Started
 
 ### Clone This Repo
 
-Use `git clone https://github.com/layer0-docs/layer0-swell.git` to get the files within this repository onto your local machine.
+Use `git clone https://github.com/layer0-docs/layer0-swell-example.git` to get the files within this repository onto your local machine.
 
 ### Install dependencies
 

@@ -1,8 +1,12 @@
 <template>
   <div v-if="sections.length">
     <transition-group name="page-section">
-      <div v-for="(section, index) in sections" :key="JSON.stringify(section)">
+      <div
+        v-for="(section, index) in sections"
+        :key="`${index}.${section.type}`"
+      >
         <SectionAsyncLoader
+          v-if="section"
           :section="section"
           :collection-index="index"
           :fetch-is-pending="!loaded && $fetchState.pending"
@@ -78,7 +82,9 @@ export default {
 
       if (this.$swellEditor && sectionCountIsEqual) {
         newSections.forEach((section, index) => {
-          if (JSON.stringify(section) !== JSON.stringify(this.sections[index])) {
+          if (
+            JSON.stringify(section) !== JSON.stringify(this.sections[index])
+          ) {
             // Update section if current data isn't identical
             const cleanSection = { ...section }
             delete cleanSection.$locale // $locale is not a valid attribute name

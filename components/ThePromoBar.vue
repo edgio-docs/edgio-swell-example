@@ -5,7 +5,11 @@
       { hidden: hidden },
     ]"
   >
-    <NuxtLink v-if="url" :to="localePath(url)" class="block rounded-none p-2 text-primary-lighter">
+    <NuxtLink
+      v-if="url"
+      :to="localePath(url)"
+      class="block rounded-none p-2 text-primary-lighter"
+    >
       <span>{{ text }}</span>
     </NuxtLink>
     <p v-else class="p-2">

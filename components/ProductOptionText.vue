@@ -6,7 +6,7 @@
       v-if="option.inputType === 'short_text'"
       v-model="value"
       :placeholder="option.inputHint"
-      class="text-input h-12 mt-3"
+      class="text-input h-12 bg-primary-lightest"
       @input="emitValue"
     />
     <!-- Text area -->
@@ -14,12 +14,15 @@
       v-else
       v-model="value"
       :placeholder="option.inputHint"
-      class="text-input mt-3"
+      class="text-input"
       @input="emitValue"
     ></textarea>
 
     <template v-if="validation">
-      <div v-if="validation.$dirty && validation.$error" class="text-error-default mt-2">
+      <div
+        v-if="validation.$dirty && validation.$error"
+        class="text-error-default mt-2"
+      >
         <span v-if="!validation.required" class="label-sm text-error-default">{{
           $t('products.slug.options.required')
         }}</span>

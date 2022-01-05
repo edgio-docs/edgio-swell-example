@@ -5,7 +5,8 @@ const beforeEnterTransition = {
 }
 
 const enterTransition = {
-  transition: 'height 0.4s cubic-bezier(0.6, 0.2, 0, 1), opacity 0.4s 0.2s linear',
+  transition:
+    'height 0.4s cubic-bezier(0.6, 0.2, 0, 1), opacity 0.4s 0.2s linear',
   position: 'absolute',
   visibility: 'hidden',
 }
@@ -15,7 +16,8 @@ const afterEnterTransition = {
 }
 
 const leaveTransition = {
-  transition: 'height 0.4s 0.1s cubic-bezier(0.6, 0.2, 0, 1), opacity 0.1s linear',
+  transition:
+    'height 0.4s 0.1s cubic-bezier(0.6, 0.2, 0, 1), opacity 0.1s linear',
   opacity: 0,
 }
 

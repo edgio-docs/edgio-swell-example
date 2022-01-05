@@ -17,7 +17,7 @@ const generateResponsiveImageData = (url, options) => {
     q = Math.round(q) // TODO lower value for higher pixel density screens - not needed with uploadcare
   }
 
-  const srcsetArray = widths.map((size) => {
+  const srcsetArray = (widths || []).map((size) => {
     const width = size // disabled tbd: Math.round(size * dpr)
     const sizeUrl = `${url}?width=${width}&fm=${fm}&q=${q}`
     return `${sizeUrl} ${width}w`
@@ -80,8 +80,16 @@ export default {
   },
 
   render(h, context) {
-    const { source, alt, aspectRatio, quality, widths, sizes, isBackground, lazyLoad } =
-      context.props
+    const {
+      source,
+      alt,
+      aspectRatio,
+      quality,
+      widths,
+      sizes,
+      isBackground,
+      lazyLoad,
+    } = context.props
 
     const [x, y] = aspectRatio.split(':')
     const ratioPadding = `${(y / x) * 100}%`

@@ -1,5 +1,8 @@
 <template>
-  <div class="relative container pt-6 pb-24 md:max-w-112 md:pt-24" @keyup.enter="endPasswordReset">
+  <div
+    class="relative container pt-6 pb-24 md:max-w-112 md:pt-24"
+    @keyup.enter="endPasswordReset"
+  >
     <h2 class="pb-6">{{ $t('account.forgotPassword.title') }}</h2>
 
     <p class="text-sm mb-10">
@@ -21,9 +24,11 @@
           $t('account.forgotPassword.email.format')
         }}</span>
 
-        <span v-else-if="!$v.email.required" class="label-sm text-error-default">{{
-          $t('account.forgotPassword.email.required')
-        }}</span>
+        <span
+          v-else-if="!$v.email.required"
+          class="label-sm text-error-default"
+          >{{ $t('account.forgotPassword.email.required') }}</span
+        >
       </template>
     </div>
 

@@ -10,7 +10,10 @@
       />
 
       <div class="min-h-screen bg-primary-lighter">
-        <div v-if="customer" class="w-full md:container md:flex relative md:pt-12 pt-6 pb-24">
+        <div
+          v-if="customer"
+          class="w-full md:container md:flex relative md:pt-12 pt-6 pb-24"
+        >
           <!-- Header -->
           <div>
             <div
@@ -29,7 +32,13 @@
                 <p>{{ customer.email }}</p>
 
                 <button
-                  class="flex flex-row whitespace-no-wrap items-center mt-2 cursor-pointer"
+                  class="
+                    flex flex-row
+                    whitespace-no-wrap
+                    items-center
+                    mt-2
+                    cursor-pointer
+                  "
                   @click="editProfilePopupIsActive = true"
                 >
                   <BaseIcon icon="uil:edit" size="sm" /><span class="ml-2">{{
@@ -56,10 +65,23 @@
               </div>
 
               <!-- Views (Desktop) -->
-              <ul class="hidden md:block border-t border-primary-light text-base">
-                <li v-for="view in localizedViews" :key="view.value" class="last:mb-0">
+              <ul
+                class="hidden md:block border-t border-primary-light text-base"
+              >
+                <li
+                  v-for="view in localizedViews"
+                  :key="view.value"
+                  class="last:mb-0"
+                >
                   <NuxtLink
-                    class="view-link pl-3 py-4 block hover:bg-primary-light rounded-none"
+                    class="
+                      view-link
+                      pl-3
+                      py-4
+                      block
+                      hover:bg-primary-light
+                      rounded-none
+                    "
                     :to="localePath(`/account/${view.value}/`)"
                   >
                     {{ view.label }}
@@ -70,7 +92,13 @@
               <!-- Log out (Mobile) -->
               <div class="hidden md:block border-t border-primary-light pt-6">
                 <button
-                  class="flex flex-row whitespace-no-wrap items-center mt-2 cursor-pointer"
+                  class="
+                    flex flex-row
+                    whitespace-no-wrap
+                    items-center
+                    mt-2
+                    cursor-pointer
+                  "
                   @click="logoutPopupIsActive = true"
                 >
                   <BaseIcon icon="uil:signout" size="sm" /><span class="ml-2">{{
@@ -120,7 +148,6 @@
 </template>
 
 <script>
-// Helpers
 import { mapState } from 'vuex'
 
 export default {
@@ -160,21 +187,24 @@ export default {
           async: true,
           body: true,
         },
+      ],
+      link: [
         {
-          type: 'text/javascript',
-          innerHTML: this.$swell.settings.get('scripts.global.head'),
-        },
-        {
-          type: 'text/javascript',
-          innerHTML: this.$swell.settings.get('scripts.global.body'),
-          body: true,
+          rel: 'preconnect',
+          href: process.env.cdnHost,
+          crossorigin: true,
         },
       ],
     }
   },
 
   computed: {
-    ...mapState(['notification', 'cartIsActive', 'customer', 'customerLoggedIn']),
+    ...mapState([
+      'notification',
+      'cartIsActive',
+      'customer',
+      'customerLoggedIn',
+    ]),
 
     currentRouteValue() {
       const path = this.$route.path
@@ -192,22 +222,21 @@ export default {
 
     hideOnRouteRoot() {
       const matchedPath = this.$route.matched[0].path
-      const pathsToHideOn = ['/account/orders/:id/', '/account/subscriptions/:id/']
+      const pathsToHideOn = [
+        '/account/orders/:id/',
+        '/account/subscriptions/:id/',
+      ]
       return pathsToHideOn.some((path) => matchedPath.includes(path))
     },
 
     localizedViews() {
       const { views } = this
-      return views.map(({ label, value }) => ({
-        label: this.$t(label),
-        value,
-      }))
+      return views.map(({ label, value }) => ({ label: this.$t(label), value }))
     },
   },
 
   watch: {
     $route(to) {
-      this.cartIsActive = false
       this.searchIsActive = false
     },
   },

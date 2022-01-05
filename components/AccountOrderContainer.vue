@@ -25,10 +25,21 @@
           </div>
 
           <div
-            v-if="orderProducts.length > thumbnails.length && index === thumbnails.length - 1"
+            v-if="
+              orderProducts.length > thumbnails.length &&
+              index === thumbnails.length - 1
+            "
             class="overlay text-primary-lightest"
           >
-            <span class="absolute center-xy text-lg font-semibold text-primary-lightest">
+            <span
+              class="
+                absolute
+                center-xy
+                text-lg
+                font-semibold
+                text-primary-lightest
+              "
+            >
               +{{ orderProducts.length - thumbnails.length }}
             </span>
           </div>
@@ -45,7 +56,8 @@
             :class="{
               'text-ok-default': order.status === 'complete',
               'text-error-default': order.status === 'canceled',
-              'text-primary-dark': order.status !== 'complete' || order.status !== 'canceled',
+              'text-primary-dark':
+                order.status !== 'complete' || order.status !== 'canceled',
             }"
             fill="none"
             viewBox="0 0 10 10"
@@ -54,7 +66,9 @@
           </svg>
         </div>
 
-        <h2 class="md:hidden">{{ $t('account.orders.order.title') }} #{{ order.number }}</h2>
+        <h2 class="md:hidden">
+          {{ $t('account.orders.order.title') }} #{{ order.number }}
+        </h2>
 
         <p class="text-sm mb-2">
           <span class="pr-2">{{ $t('account.orders.order.date') }}</span>
@@ -68,7 +82,9 @@
 
         <p class="text-sm mb-2">
           <span class="pr-2">{{ $t('account.orders.order.total') }}</span>
-          <span class="font-semibold">{{ formatMoney(order.grandTotal, order.currency) }}</span>
+          <span class="font-semibold">{{
+            formatMoney(order.grandTotal, order.currency)
+          }}</span>
         </p>
 
         <div class="md:hidden mb-10">
@@ -77,7 +93,8 @@
             :class="{
               'text-ok-default': order.status === 'complete',
               'text-error-default': order.status === 'canceled',
-              'text-primary-dark': order.status !== 'complete' || order.status !== 'canceled',
+              'text-primary-dark':
+                order.status !== 'complete' || order.status !== 'canceled',
             }"
             fill="none"
             viewBox="0 0 10 10"

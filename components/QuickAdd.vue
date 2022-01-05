@@ -1,7 +1,7 @@
 <template>
   <div>
     <BaseButton
-      v-if="!quickAddIsActive && !cartIsUpdating"
+      v-show="!quickAddIsActive && !cartIsUpdating"
       :label="label"
       @click.native="interact"
     />
@@ -10,7 +10,16 @@
     <transition name="fade" :duration="200">
       <div
         v-if="quickAddIsActive"
-        class="w-full bottom-0 px-4 py-3 bg-primary-lighter shadow-md rounded z-10"
+        class="
+          w-full
+          bottom-0
+          px-4
+          py-3
+          bg-primary-lighter
+          shadow-md
+          rounded
+          z-10
+        "
       >
         <!-- Product options -->
         <div v-for="(input, index) in optionInputs" :key="input.name">
@@ -27,6 +36,26 @@
         </div>
       </div>
     </transition>
+
+    <!-- Error messages -->
+    <div v-if="addToCartError" class="relative px-4">
+      <div
+        class="
+          absolute
+          left-0
+          bottom-0
+          w-full
+          px-4
+          py-3
+          bg-primary-lighter
+          rounded
+        "
+      >
+        <span class="w-full label-sm text-error text-center">{{
+          $t('products.preview.quickAdd.outOfStock')
+        }}</span>
+      </div>
+    </div>
 
     <!-- Adding in progress -->
     <div v-if="cartIsUpdating" class="relative px-4">
@@ -64,6 +93,7 @@ export default {
       optionState: null,
       quickAddIsActive: false,
       quickAddIndex: 0,
+      addToCartError: null,
     }
   },
 
@@ -143,9 +173,10 @@ export default {
   methods: {
     // Sets flow of product purchase + labels
     setFlow() {
-      const { optionInputs } = this
+      const { optionInputs, product } = this
 
       if (
+        product.bundleItems?.length ||
         optionInputs.length > 2 ||
         optionInputs.some(({ option }) =>
           option.inputType ? !option.inputType.includes('select') : false
@@ -176,11 +207,21 @@ export default {
       if (this.$v.optionState[option].$invalid) return
 
       // Add to cart if only one option was available
-      if (optionInputs.length === 1 || quickAddIndex + 1 >= optionInputs.length) {
-        this.addToCart()
-
+      if (
+        optionInputs.length === 1 ||
+        quickAddIndex + 1 >= optionInputs.length
+      ) {
         // Hide options when adding to cart
         this.quickAddIsActive = false
+
+        // Check if product/variant is in stock before adding to cart
+        if (!this.checkHasStock()) {
+          this.addToCartError = 'Out of stock'
+          return
+        }
+
+        // Add to cart
+        this.addToCart()
       } else {
         // Move onto next option if available
         this.quickAddIndex++
@@ -191,7 +232,14 @@ export default {
     interact() {
       switch (this.flow) {
         case 'quick-view':
-          this.$emit('open-quick-view')
+          this.$store.commit('setState', {
+            key: 'quickViewIsVisible',
+            value: true,
+          })
+          this.$store.commit('setState', {
+            key: 'quickViewProductId',
+            value: this.product.id,
+          })
           break
         case 'quick-add':
           this.quickAddIsActive = true
@@ -204,19 +252,43 @@ export default {
       }
     },
 
+    // Check if current variation has stock
+    checkHasStock() {
+      const { product, variation } = this
+      return (
+        !product.stockTracking ||
+        product.stockPurchasable ||
+        ((variation.stockStatus !== 'out_of_stock' || variation.stockStatus) &&
+          variation.stockLevel > 0)
+      )
+    },
+
     // Add product to cart with selected options
-    addToCart() {
-      // Emit event to show updating label
-      this.$emit('adding-to-cart')
+    async addToCart() {
+      try {
+        await this.$store.dispatch('addCartItem', {
+          productId: this.variation.id,
+          quantity: 1,
+          options: this.optionState,
+        })
 
-      // Emit event to hide quick add button if keep-alive is active
-      this.$emit('keep-alive', false)
+        // Close popup when product has been added to cart
+        this.$emit('click-close')
+      } catch (err) {
+        let errorMessage
+        switch (err.message) {
+          case 'invalid_stock':
+            errorMessage = this.$t('cart.exceedsStockLevel')
+            break
+          default:
+            break
+        }
 
-      this.$store.dispatch('addCartItem', {
-        productId: this.variation.id,
-        quantity: 1,
-        options: this.optionState,
-      })
+        this.$store.dispatch('showNotification', {
+          message: errorMessage,
+          type: 'error',
+        })
+      }
     },
   },
 

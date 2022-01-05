@@ -3,7 +3,9 @@
     <!-- Breadcrumb -->
     <NuxtLink
       v-if="previousOrderRoute"
-      :to="localePath(previousOrderRoute ? previousOrderRoute : '/account/orders/')"
+      :to="
+        localePath(previousOrderRoute ? previousOrderRoute : '/account/orders/')
+      "
       class="flex items-center cursor-pointer mb-6"
     >
       <BaseIcon icon="uil:angle-left" size="sm" />
@@ -51,11 +53,11 @@ export default {
     }
   },
 
-  fetch() {
+  async fetch() {
     // Set page data
     const { $swell } = this
 
-    this.shopLink = $swell.settings.get('cart.shopLink', '/categories/')
+    this.shopLink = await $swell.settings.get('cart.shopLink', '/categories/')
   },
 
   watch: {

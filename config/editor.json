@@ -234,14 +234,18 @@
           "id": "header.promo_text",
           "label": "Promo bar text",
           "type": "short_text",
-          "conditions": { "header.show_promo": true },
+          "conditions": {
+            "header.show_promo": true
+          },
           "localized": true
         },
         {
           "id": "header.promo_url",
           "label": "Promo bar URL",
           "type": "url",
-          "conditions": { "header.show_promo": true }
+          "conditions": {
+            "header.show_promo": true
+          }
         },
         {
           "type": "heading",
@@ -258,6 +262,58 @@
           "label": "Hide header when scrolling down",
           "type": "checkbox",
           "default": true
+        },
+        {
+          "type": "heading",
+          "label": "Locale select"
+        },
+        {
+          "id": "header.locale.display",
+          "label": "Display",
+          "type": "select",
+          "default": "flag",
+          "options": [
+            {
+              "value": "flag",
+              "label": "Flag"
+            },
+            {
+              "value": "code",
+              "label": "Locale code"
+            }
+          ]
+        },
+        {
+          "id": "header.locale.hide_flag",
+          "label": "Hide flag on select list",
+          "type": "checkbox",
+          "default": false
+        },
+        {
+          "type": "heading",
+          "label": "Currency select"
+        },
+        {
+          "id": "header.currency.display",
+          "label": "Display",
+          "type": "select",
+          "default": "symbol-code",
+          "options": [
+            {
+              "value": "symbol-code",
+              "label": "Currency symbol and code"
+            },
+            {
+              "value": "code",
+              "label": "Currency code"
+            }
+          ]
+        },
+        {
+          "id": "header.currency.hide_symbol",
+          "label": "Hide currency symbol on select list",
+          "type": "checkbox",
+          "default": false
         }
       ]
     },
@@ -282,7 +338,9 @@
           "label": "Secondary footer menu",
           "type": "menu",
           "default": "footer-secondary",
-          "conditions": { "footer.show_secondary_menu": true }
+          "conditions": {
+            "footer.show_secondary_menu": true
+          }
         },
         {
           "id": "footer.show_social",
@@ -302,14 +360,18 @@
           "label": "Contact info heading",
           "type": "short_text",
           "default": "Contact us",
-          "conditions": { "footer.show_contact_info": true },
+          "conditions": {
+            "footer.show_contact_info": true
+          },
           "localized": true
         },
         {
           "id": "footer.contact_info_text",
           "label": "Contact info text",
           "type": "basic_html",
-          "conditions": { "footer.show_contact_info": true },
+          "conditions": {
+            "footer.show_contact_info": true
+          },
           "localized": true
         },
         {
@@ -323,14 +385,18 @@
           "label": "Email signup heading",
           "type": "short_text",
           "default": "Email newsletter",
-          "conditions": { "footer.show_email_signup": true },
+          "conditions": {
+            "footer.show_email_signup": true
+          },
           "localized": true
         },
         {
           "id": "footer.email_signup_text",
           "label": "Email signup text",
           "type": "basic_html",
-          "conditions": { "footer.show_email_signup": true },
+          "conditions": {
+            "footer.show_email_signup": true
+          },
           "localized": true
         },
         {
@@ -430,6 +496,18 @@
           "type": "short_text",
           "format": "url",
           "placeholder": "https://vimeo.com/mystore"
+        },
+        {
+          "id": "social_links.whatsapp.show",
+          "label": "WhatsApp",
+          "type": "toggle"
+        },
+        {
+          "id": "social_links.whatsapp.url",
+          "label": "WhatsApp Contact URL",
+          "type": "short_text",
+          "format": "url",
+          "placeholder": "https://wa.me/18005551234"
         }
       ]
     },
@@ -490,6 +568,11 @@
           "type": "short_text",
           "format": "url",
           "placeholder": "/categories/"
+        },
+        {
+          "id": "cart.validate_stock",
+          "label": "Validate stock when adding to cart",
+          "type": "toggle"
         }
       ]
     },
@@ -515,14 +598,14 @@
           "id": "scripts.global.head",
           "label": "Global <head> script",
           "type": "long_text",
-          "placeholder": "Paste code here, excluding <script> tag opening and closing",
+          "placeholder": "Paste code here, including <script> tag opening and closing",
           "hint": "Scripts to be loaded on every page of your store, before closing the <head> tag."
         },
         {
           "id": "scripts.global.body",
           "label": "Global <body> script",
           "type": "long_text",
-          "placeholder": "Paste code here, excluding <script> tag opening and closing",
+          "placeholder": "Paste code here, including <script> tag opening and closing",
           "hint": "Scripts to be loaded on every page of your store, before closing the <body> tag."
         }
       ]
@@ -907,7 +990,6 @@
         }
       ]
     },
-
     {
       "id": "account.orders.details",
       "label": "Order details",
@@ -966,6 +1048,13 @@
           "id": "lang.account.orders._id.quantity",
           "label": "Quantity",
           "default": "Qty: {n}",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.account.orders._id.bundle_includes",
+          "label": "Bundle includes title",
+          "default": "Bundle includes",
           "type": "short_text",
           "localized": true
         },
@@ -3122,9 +3211,21 @@
           "localized": true
         },
         {
-          "id": "lang.products._slug.options.required",
-          "label": "Options field required message",
-          "default": "Please enter a value.",
+          "id": "lang.products._slug.stock_status.bundle_items_unavailable.label",
+          "label": "Bundle items unavailable status",
+          "default": "Bundle item(s) unavailable",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.stock_status.bundle_items_unavailable.message",
+          "label": "Bundle items unavailable message",
+          "default": "",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.stock_remaining",
+          "label": "Stock remaining",
+          "default": "{n} remaining",
           "type": "short_text",
           "localized": true
         },
@@ -3150,9 +3251,31 @@
           "localized": true
         },
         {
-          "id": "lang.products._slug.share",
-          "label": "Share it",
-          "default": "Share it",
+          "label": "Bundle items",
+          "type": "heading"
+        },
+        {
+          "id": "lang.products._slug.bundle.title",
+          "label": "Bundle items title",
+          "default": "In this bundle",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.bundle.out_of_stock",
+          "label": "Bundle items out of stock message",
+          "default": "This product is out of stock.",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "label": "Up-sells",
+          "type": "heading"
+        },
+        {
+          "id": "lang.products._slug.up_sell.title",
+          "label": "Up-sell title",
+          "default": "Other items you may like",
           "type": "short_text",
           "localized": true
         },
@@ -3206,6 +3329,89 @@
           "id": "lang.products.preview.quick_add.adding.loading_label",
           "label": "Adding loading label",
           "default": "Adding...",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products.preview.quick_add.out_of_stock",
+          "label": "Out of stock notification",
+          "default": "This product is out of stock."
+        },
+        {
+          "label": "Purchase Options: Subscription",
+          "type": "heading"
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.daily.label",
+          "label": "Interval label: Days",
+          "default": "days | day | days",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.daily.short",
+          "label": "Daily Interval Shorthand",
+          "default": "day",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.weekly.label",
+          "label": "Interval label: Week",
+          "default": "weeks | week | weeks",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.weekly.short",
+          "label": "Weekly Interval Shorthand",
+          "default": "wk",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.monthly.label",
+          "label": "Interval label: Month",
+          "default": "months | month | months",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.monthly.short",
+          "label": "Monthly Interval Shorthand",
+          "default": "mo",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.yearly.label",
+          "label": "Interval label: Year",
+          "default": "years | year | years",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.yearly.short",
+          "label": "Yearly Interval Shorthand",
+          "default": "yr",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "id": "lang.products._slug.purchase_options.interval.products_interval",
+          "label": "Products Interval",
+          "default": "{count} every {n} {interval}",
+          "type": "short_text",
+          "localized": true
+        },
+        {
+          "label": "Purchase Options: Standard",
+          "type": "heading"
+        },
+        {
+          "id": "lang.products._slug.purchase_options.standard.default_label",
+          "label": "Standard Purchase Default label",
+          "default": "One-time Purchase",
           "type": "short_text",
           "localized": true
         }
@@ -3398,6 +3604,13 @@
           "default": "Account",
           "type": "short_text",
           "localized": true
+        },
+        {
+          "id": "lang.navigation.menu",
+          "label": "Menu link label",
+          "default": "Menu",
+          "type": "short_text",
+          "localized": true
         }
       ]
     },
@@ -3433,6 +3646,13 @@
           "default": "Learn more",
           "type": "short_text",
           "localized": true
+        },
+        {
+          "id": "lang.notifications.cookies.close",
+          "label": "Close button label",
+          "default": "Close",
+          "type": "short_text",
+          "localized": true
         }
       ]
     },
@@ -3441,6 +3661,13 @@
       "label": "E-mail signup",
       "icon": "envelope",
       "fields": [
+        {
+          "id": "lang.email_signup.placeholder",
+          "label": "E-mail field placeholder",
+          "default": "E-mail",
+          "type": "short_text",
+          "localized": true
+        },
         {
           "id": "lang.email_signup.success",
           "label": "Success message",
@@ -3453,6 +3680,13 @@
           "label": "Invalid e-mail error message",
           "default": "That doesn't look like an email...",
           "type": "long_text",
+          "localized": true
+        },
+        {
+          "id": "lang.email_signup.send",
+          "label": "Send label",
+          "default": "Send",
+          "type": "short_text",
           "localized": true
         }
       ]
@@ -3622,7 +3856,13 @@
           "type": "short_text",
           "localized": true
         },
-
+        {
+          "id": "lang.cart.exceeds_stock_level",
+          "label": "Cart item stock restriction",
+          "default": "You cannot add more than what is available of this product.",
+          "type": "short_text",
+          "localized": true
+        },
         {
           "id": "lang.cart.item.edit",
           "label": "Edit cart item",

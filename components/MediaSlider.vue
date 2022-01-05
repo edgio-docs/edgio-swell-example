@@ -2,7 +2,11 @@
   <div class="relative bg-primary-light">
     <!-- Media -->
     <ClientOnly>
-      <VueGlide v-if="media.length" v-model="activeSlide" :options="glideOptions">
+      <VueGlide
+        v-if="media.length"
+        v-model="activeSlide"
+        :options="glideOptions"
+      >
         <VueGlideSlide v-for="image in media" :key="image.id">
           <VisualMedia :lazy="false" :source="image" :alt="image.alt" />
         </VueGlideSlide>
@@ -19,8 +23,10 @@
       >
         <span
           :class="{
-            'bg-primary-lighter': indicatorColor === 'light' && activeSlide === index - 1,
-            'bg-primary-darkest': indicatorColor === 'dark' && activeSlide === index - 1,
+            'bg-primary-lighter':
+              indicatorColor === 'light' && activeSlide === index - 1,
+            'bg-primary-darkest':
+              indicatorColor === 'dark' && activeSlide === index - 1,
             'border-primary-lighter': indicatorColor === 'light',
             'border-primary-darkest': indicatorColor === 'dark',
           }"
@@ -33,15 +39,20 @@
 
 <script>
 // Helpers
-import { Glide, GlideSlide } from 'vue-glide-js'
 import 'vue-glide-js/dist/vue-glide.css'
 
 export default {
   name: 'MediaSlider',
 
   components: {
-    [Glide.name]: Glide,
-    [GlideSlide.name]: GlideSlide,
+    async VueGlide() {
+      const { Glide } = await import('vue-glide-js')
+      return Glide
+    },
+    async VueGlideSlide() {
+      const { GlideSlide } = await import('vue-glide-js')
+      return GlideSlide
+    },
   },
 
   props: {
@@ -57,7 +68,7 @@ export default {
 
   data() {
     return {
-      activeSlide: 0,
+      activeSlide: -1, // setting to -1, allows for first slide to be initial
       glideOptions: {
         type: 'carousel',
         perView: 1,

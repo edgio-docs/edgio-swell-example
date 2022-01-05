@@ -19,6 +19,7 @@
         },
       ]"
       :type="buttonType"
+      :aria-label="ariaLabel"
     >
       <!-- Loading spinner -->
       <div v-if="loadingLabel" class="absolute center-xy">
@@ -34,7 +35,12 @@
         }"
       >
         <!-- Icon, if applicable -->
-        <BaseIcon v-if="icon" :icon="`uil:${icon}`" size="sm" class="inline-block mr-2" />
+        <BaseIcon
+          v-if="icon"
+          :icon="`uil:${icon}`"
+          size="sm"
+          class="inline-block mr-2"
+        />
 
         <template v-if="isLoading">
           {{ loadingLabel }}
@@ -96,6 +102,10 @@ export default {
       default: '',
     },
     label: {
+      type: String,
+      default: '',
+    },
+    ariaLabel: {
       type: String,
       default: '',
     },

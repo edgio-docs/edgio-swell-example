@@ -1,23 +1,49 @@
-import consola from 'consola'
-import get from 'lodash/get'
+import swell from 'swell-js'
 import settings from './config/settings.json'
+import menus from './config/menus.json'
 import { getGoogleFontConfig } from './modules/swell-editor/utils'
-import { getLangSettings } from './modules/swell-editor/lang/utils'
+import { getLangSettings } from './modules/swell/lang/utils'
 import { mergeSettings } from './modules/swell/utils/mergeSettings'
-
-const logger = consola.withScope('swell-editor')
+import getRoutes from './modules/swell/utils/getRoutes'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const editorMode = process.env.SWELL_EDITOR === 'true'
-
-if (editorMode) {
-  logger.info('Swell Editor enabled')
-}
+const storeId = process.env.SWELL_STORE_ID || settings.store.id
+const publicKey = process.env.SWELL_PUBLIC_KEY || settings.store.public_key
+const storeUrl = process.env.SWELL_STORE_URL || settings.store.url
 
 export default async () => {
-  const allSettings = await mergeSettings(settings)
+  swell.init(storeId, publicKey, {
+    useCamelCase: true,
+    url: storeUrl,
+    previewContent: editorMode || !isProduction,
+  })
+
+  await swell.settings.load()
+
+  swell.settings.set({
+    value: mergeSettings(await swell.settings.get(), settings),
+  })
+
+  swell.settings.set({
+    model: 'menus',
+    value: mergeSettings(
+      swell.settings.getState('/settings/menus', 'menuState'),
+      menus
+    ),
+  })
+
+  const currentSettings = await swell.settings.get()
+  const loadingColor = await swell.settings.get('colors.accent')
+  const gtmId = await swell.settings.get('analytics.gtmId')
+  const storeName = await swell.settings.get('store.name')
+  const i18n = await getLangSettings(swell)
 
   return {
+    target: editorMode ? 'server' : 'static',
+    build: {
+      analyze: !isProduction,
+    },
     vue: {
       config: {
         devtools: !isProduction,
@@ -34,13 +60,16 @@ export default async () => {
     /*
      ** Set the progress-bar color
      */
-    loading: { color: get(allSettings, 'colors.accent'), continuous: true },
+    loading: {
+      color: loadingColor,
+      continuous: true,
+    },
 
     /*
      ** Vue plugins to load before mounting the App
      */
     plugins: [
-      { src: '~/plugins/vue-country-region-select', mode: 'client' },
+      { src: '~/plugins/global-scripts', mode: 'client' },
       { src: '~/plugins/vue-credit-card-validation', mode: 'client' },
       { src: '~/plugins/directives', mode: 'client' },
       { src: '~/plugins/swell-lang.js' },
@@ -52,25 +81,40 @@ export default async () => {
     modules: [
       ['@nuxtjs/gtm'],
 
-      [
-        '@nuxtjs/sentry',
-        /*
-         ** Logs app errors with Sentry's browser and node SDKs.
-         *
-         *  You can use environment variables or the object below to set config options.
-         *  See https://github.com/nuxt-community/sentry-module for all available
-         *  options, defaults, and environment variables.
-         */
-        {
-          // dsn: '', // or SENTRY_DSN in .env
-          // config: {}
-        },
-      ],
+      // [
+      //   '@nuxtjs/sentry',
+      //   /*
+      //    ** Logs app errors with Sentry's browser and node SDKs.
+      //    *
+      //    *  You can use environment variables or the object below to set config options.
+      //    *  See https://github.com/nuxt-community/sentry-module for all available
+      //    *  options, defaults, and environment variables.
+      //    */
+      //   {
+      //     // dsn: '', // or SENTRY_DSN in .env
+      //     // config: {}
+      //   },
+      // ],
+
+      /*
+       ** Generates a sitemap.xml
+       *
+       *  Automatically generate or serve dynamic sitemap.xml for Nuxt projects!
+       *  See https://github.com/nuxt-community/sentry-module for all available
+       *  options, defaults, and environment variables.
+       */
+      '@nuxtjs/sitemap',
     ],
 
     buildModules: [
       ['@layer0/nuxt/module', { layer0SourceMaps: true }],
-      ['nuxt-i18n'],
+      [
+        /*
+         ** Generate dynamic routes for @nuxtjs/sitemap
+         *
+         */
+        '~/modules/swell/utils/generateDynamicRoutes',
+      ],
 
       [
         '@nuxtjs/tailwindcss',
@@ -93,7 +137,7 @@ export default async () => {
          *  See https://github.com/nuxt-community/google-fonts-module if you want
          *  to eject or provide your own config options.
          */
-        getGoogleFontConfig(settings),
+        getGoogleFontConfig(currentSettings),
       ],
 
       [
@@ -101,12 +145,10 @@ export default async () => {
         /*
          ** Provides communication and utilitiy functions for interfacing
          *  with Swell's storefront editor and fetching settings/content.
-         *
-         * IMPORTANT: the swell module must come after this one, otherwise everything breaks.
-         * If you aren't using the storefront editor, this module can be safely removed.
          */
         {
           useEditorSettings: editorMode,
+          settings: currentSettings,
         },
       ],
 
@@ -114,20 +156,17 @@ export default async () => {
         '~/modules/swell',
         /*
          ** Initializes Swell.js SDK and injects it into Nuxt's context.
-         *
-         *  If you've cloned this repository from your store dashboard,
-         *  these settings will already be configured in config/settings.json.
-         *
-         *  You can optionally override them here or using environment variables.
-         *  https://github.com/swellstores/swell-theme-origin#configuration
          */
         {
-          storeId: process.env.SWELL_STORE_ID,
-          publicKey: process.env.SWELL_PUBLIC_KEY,
-          previewContent: editorMode,
-          storeUrl: process.env.SWELL_STORE_URL,
+          storeId,
+          publicKey,
+          storeUrl,
+          previewContent: editorMode || !isProduction,
+          settings: currentSettings,
         },
       ],
+
+      ['@nuxtjs/i18n'],
 
       [
         '@nuxtjs/pwa',
@@ -142,28 +181,41 @@ export default async () => {
     ],
 
     gtm: {
-      id: allSettings.analytics.gtmId,
-      enabled: allSettings.analytics.gtmId && isProduction,
+      id: gtmId,
+      enabled: !!gtmId && isProduction,
     },
 
     pwa: {
       manifest: false,
       meta: {
-        name: get(allSettings, 'store.name'),
+        name: storeName,
       },
       workbox: {
         runtimeCaching: [
           {
-            urlPattern: 'https://cdn.schema.io/*',
+            urlPattern:
+              `${process.env.CDN_HOST}/*` || 'https://cdn.schema.io/*',
           },
         ],
       },
     },
 
-    i18n: await getLangSettings(allSettings, editorMode),
+    i18n,
+
+    sitemap: {
+      hostname: storeUrl,
+      gzip: true,
+      i18n: true,
+      exclude: ['/account/**', '/*/account/**'],
+    },
 
     generate: {
-      fallback: true, // Fallback to the generated 404.html
+      exclude: [/^\/?([a-z]{2}-?[A-Z]{2}?)?\/account/],
+      fallback: true, // Fallback to the generated 404.html,
+      concurrency: 1,
+      interval: 25,
+      crawler: false,
+      routes: () => getRoutes(swell),
     },
 
     /*
@@ -189,6 +241,10 @@ export default async () => {
     server: {
       host: process.env.HOST || 'localhost',
       port: process.env.PORT || 3333,
+    },
+
+    env: {
+      cdnHost: process.env.CDN_HOST || 'https://cdn.schema.io',
     },
   }
 }

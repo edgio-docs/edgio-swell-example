@@ -8,7 +8,11 @@ html {
 }
 
 button {
-  @apply rounded text-primary-darkest font-semibold;
+  @apply rounded font-semibold;
+
+  &:not(.text-inherit, .btn--lg) {
+    @apply text-primary-darkest;
+  }
 
   &:hover {
     @apply text-accent-default;
@@ -89,4 +93,12 @@ textarea {
 
 .tracking-inherit {
   letter-spacing: inherit;
+}
+
+.markdown ul {
+  @apply list-inside list-disc;
+}
+
+.markdown ol {
+  @apply list-inside list-decimal;
 }

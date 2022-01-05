@@ -22,14 +22,26 @@
     ]"
     class="relative flex flex-wrap"
   >
-    <div class="relative w-full px-6 py-20 md:w-1/2 md:px-12 md:py-16 lg:px-26 lg:py-32">
+    <div
+      class="
+        relative
+        w-full
+        px-6
+        py-20
+        md:w-1/2 md:px-12 md:py-16
+        lg:px-26 lg:py-32
+      "
+    >
       <h2 class="mb-3 text-3xl md:text-4xl lg:text-6xl">
         {{ heading }}
       </h2>
       <p class="mb-6">
         {{ description }}
       </p>
-      <EmailSignupForm :class="{ 'mx-auto': textAlign === 'center' }" class="max-w-96" />
+      <EmailSignupForm
+        :class="{ 'mx-auto': textAlign === 'center' }"
+        class="max-w-96"
+      />
     </div>
     <div v-if="alignX !== 'center'" class="relative w-full md:w-1/2">
       <VisualMedia

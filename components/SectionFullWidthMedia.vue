@@ -43,16 +43,20 @@
       <div
         :class="[
           {
-            'p-6 sm:p-7 lg:p-8 xl:p-20': outerSpacingX === 'none' && innerSpacing === 'md',
+            'p-6 sm:p-7 lg:p-8 xl:p-20':
+              outerSpacingX === 'none' && innerSpacing === 'md',
           },
           {
-            'p-6 sm:p-7 lg:p-8 xl:p-20': outerSpacingX === 'none' && innerSpacing === 'sm',
+            'p-6 sm:p-7 lg:p-8 xl:p-20':
+              outerSpacingX === 'none' && innerSpacing === 'sm',
           },
           {
-            'p-8 sm:p-12 md:p-16 lg:p-20': outerSpacingX === 'md' && innerSpacing === 'md',
+            'p-8 sm:p-12 md:p-16 lg:p-20':
+              outerSpacingX === 'md' && innerSpacing === 'md',
           },
           {
-            'p-8 md:p-12 lg:p-16': outerSpacingX === 'md' && innerSpacing === 'sm',
+            'p-8 md:p-12 lg:p-16':
+              outerSpacingX === 'md' && innerSpacing === 'sm',
           },
         ]"
         class="relative"

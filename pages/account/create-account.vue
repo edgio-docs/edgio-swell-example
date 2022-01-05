@@ -1,5 +1,8 @@
 <template>
-  <div class="relative container pt-6 pb-24 md:max-w-112 md:pt-24" @keyup.enter="createAccount">
+  <div
+    class="relative container pt-6 pb-24 md:max-w-112 md:pt-24"
+    @keyup.enter="createAccount"
+  >
     <h2 class="pb-6">{{ $t('account.createAccount.title') }}</h2>
 
     <div class="mb-6">
@@ -11,13 +14,19 @@
         autocomplete="given-name"
       />
       <template v-if="$v.firstName.$dirty">
-        <span v-if="!$v.firstName.required" class="label-sm text-error-default">{{
-          $t('account.createAccount.firstName.required')
-        }}</span>
+        <span
+          v-if="!$v.firstName.required"
+          class="label-sm text-error-default"
+          >{{ $t('account.createAccount.firstName.required') }}</span
+        >
 
-        <span v-if="!$v.firstName.maxLength" class="label-sm text-error-default">{{
-          $t('account.createAccount.firstName.maxLength', { n: 40 })
-        }}</span>
+        <span
+          v-if="!$v.firstName.maxLength"
+          class="label-sm text-error-default"
+          >{{
+            $t('account.createAccount.firstName.maxLength', { n: 40 })
+          }}</span
+        >
       </template>
     </div>
 
@@ -30,13 +39,17 @@
         autocomplete="family-name"
       />
       <template v-if="$v.lastName.$dirty">
-        <span v-if="!$v.lastName.required" class="label-sm text-error-default">{{
-          $t('account.createAccount.lastName.required')
-        }}</span>
+        <span
+          v-if="!$v.lastName.required"
+          class="label-sm text-error-default"
+          >{{ $t('account.createAccount.lastName.required') }}</span
+        >
 
-        <span v-if="!$v.lastName.maxLength" class="label-sm text-error-default">{{
-          $t('account.createAccount.lastName.maxLength', { n: 40 })
-        }}</span>
+        <span
+          v-if="!$v.lastName.maxLength"
+          class="label-sm text-error-default"
+          >{{ $t('account.createAccount.lastName.maxLength', { n: 40 }) }}</span
+        >
       </template>
     </div>
 
@@ -55,9 +68,11 @@
           $t('account.createAccount.email.format')
         }}</span>
 
-        <span v-else-if="!$v.email.required" class="label-sm text-error-default">{{
-          $t('account.createAccount.email.required')
-        }}</span>
+        <span
+          v-else-if="!$v.email.required"
+          class="label-sm text-error-default"
+          >{{ $t('account.createAccount.email.required') }}</span
+        >
       </template>
     </div>
 
@@ -74,13 +89,17 @@
       />
 
       <template v-if="$v.password.$dirty">
-        <span v-if="!$v.password.minLength" class="label-sm text-error-default">{{
-          $t('account.createAccount.password.minLength', { n: 6 })
-        }}</span>
+        <span
+          v-if="!$v.password.minLength"
+          class="label-sm text-error-default"
+          >{{ $t('account.createAccount.password.minLength', { n: 6 }) }}</span
+        >
 
-        <span v-if="!$v.password.required" class="label-sm text-error-default">{{
-          $t('account.createAccount.password.required')
-        }}</span>
+        <span
+          v-if="!$v.password.required"
+          class="label-sm text-error-default"
+          >{{ $t('account.createAccount.password.required') }}</span
+        >
       </template>
     </div>
 

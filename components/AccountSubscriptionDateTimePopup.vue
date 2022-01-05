@@ -59,13 +59,21 @@
             </div>
 
             <template v-if="$v.date.$dirty">
-              <span v-if="!$v.date.required" class="label-sm text-error-default mt-2">{{
-                $t('account.subscriptions.id.popup.chooseDate.date.required')
-              }}</span>
+              <span
+                v-if="!$v.date.required"
+                class="label-sm text-error-default mt-2"
+                >{{
+                  $t('account.subscriptions.id.popup.chooseDate.date.required')
+                }}</span
+              >
 
-              <span v-else-if="!$v.date.validDate" class="label-sm text-error-default mt-2">{{
-                $t('account.subscriptions.id.popup.chooseDate.date.valid')
-              }}</span>
+              <span
+                v-else-if="!$v.date.validDate"
+                class="label-sm text-error-default mt-2"
+                >{{
+                  $t('account.subscriptions.id.popup.chooseDate.date.valid')
+                }}</span
+              >
             </template>
           </div>
 
@@ -95,13 +103,21 @@
             </div>
 
             <template v-if="$v.date.$dirty">
-              <span v-if="!$v.time.required" class="label-sm text-error-default mt-2">{{
-                $t('account.subscriptions.id.popup.chooseDate.time.required')
-              }}</span>
+              <span
+                v-if="!$v.time.required"
+                class="label-sm text-error-default mt-2"
+                >{{
+                  $t('account.subscriptions.id.popup.chooseDate.time.required')
+                }}</span
+              >
 
-              <span v-else-if="!$v.time.validDateTime" class="label-sm text-error-default mt-2">{{
-                $t('account.subscriptions.id.popup.chooseDate.time.valid')
-              }}</span>
+              <span
+                v-else-if="!$v.time.validDateTime"
+                class="label-sm text-error-default mt-2"
+                >{{
+                  $t('account.subscriptions.id.popup.chooseDate.time.valid')
+                }}</span
+              >
             </template>
           </div>
         </div>
@@ -113,12 +129,16 @@
         </div>
 
         <!-- Action buttons -->
-        <div class="w-full container fixed left-0 bottom-0 bg-primary-lighter pb-4">
+        <div
+          class="w-full container fixed left-0 bottom-0 bg-primary-lighter pb-4"
+        >
           <BaseButton
             class="mt-4"
             appearance="dark"
             :label="$t('account.subscriptions.id.popup.chooseDate.yes')"
-            :loading-label="$t('account.subscriptions.id.popup.chooseDate.loading')"
+            :loading-label="
+              $t('account.subscriptions.id.popup.chooseDate.loading')
+            "
             :is-loading="isLoading"
             @click.native="resumeOnDate"
           />

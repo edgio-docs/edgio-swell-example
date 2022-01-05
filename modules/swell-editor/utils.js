@@ -5,15 +5,16 @@ import kebabCase from 'lodash/kebabCase'
 import range from 'lodash/range'
 import round from 'lodash/round'
 import map from 'lodash/map'
-import snakeCase from 'lodash/snakeCase'
 
 import compose from 'lodash/fp/compose'
 import flatMap from 'lodash/fp/flatMap'
 import fromPairs from 'lodash/fp/fromPairs'
+import cloneDeep from 'lodash/fp/cloneDeep'
 
 import mitt from 'mitt'
 import buildUrl from 'build-url'
-import { cloneDeep } from 'lodash/fp'
+
+import { toCamel } from 'swell-js/dist/utils'
 
 const settingPaths = {
   headingFont: 'typography.headingFont',
@@ -83,14 +84,16 @@ export const editor = {
 
         if (isCssVariable(details.path)) {
           // Regenerate variables if setting is a CSS variable group
-          const settings = $swell.settings.get()
+          const settings = await $swell.settings.get()
           setCssVariables(settings)
 
           if (isFontVariable(details.path)) {
             updateGoogleFontsLink(settings)
           }
-        } else if (details.path.includes('lang')) {
-          const locale = details.path.includes(i18n.locale) ? i18n.locale : i18n.defaultLocale
+        } else if (details.path && details.path.includes('lang')) {
+          const locale = details.path.includes(i18n.locale)
+            ? i18n.locale
+            : i18n.defaultLocale
           const messages = await $swell.settings.get('lang')
 
           i18n.setLocaleMessage(locale, messages)
@@ -106,7 +109,7 @@ export const editor = {
           this.isLoaded = true
 
           // Set CSS variables on document root during initial editor connection
-          const settings = $swell.settings.get()
+          const settings = await $swell.settings.get()
           setCssVariables(settings)
           updateGoogleFontsLink(settings)
 
@@ -156,7 +159,9 @@ export const editor = {
   enableFetchListener(vm) {
     // If component has a fetch method defined on it
     const hasFetch =
-      vm.$options && typeof vm.$options.fetch === 'function' && !vm.$options.fetch.length
+      vm.$options &&
+      typeof vm.$options.fetch === 'function' &&
+      !vm.$options.fetch.length
 
     if (!vm._swellEditorFetchHandler && this.isLoaded && hasFetch) {
       // Set fetch delay to zero to avoid flash while fetch is pending
@@ -213,38 +218,9 @@ export function generateCssVariables(settings) {
   ].join('\n')
 }
 
-export function normalizeKeys(obj, params) {
-  const options = {
-    case: 'camel',
-    ignoredKeys: ['$cache'],
-    ...params,
-  }
-
-  if (obj && obj.constructor === Object) {
-    Object.keys(obj).forEach((key) => {
-      if (options.ignoredKeys.includes(key)) return
-
-      const value = obj[key]
-      delete obj[key]
-
-      if (options.case === 'camel') {
-        key = camelCase(key)
-      } else if (options.case === 'snake') {
-        key = snakeCase(key)
-      }
-
-      obj[key] = normalizeKeys(value, options)
-    })
-  } else if (obj && obj.constructor === Array) {
-    obj = obj.map((v) => normalizeKeys(v, options))
-  }
-
-  return obj
-}
-
 export function getGoogleFontConfig(settings) {
   // we clone the `settings` object so we do not mutate it
-  const normalizedSettings = normalizeKeys(cloneDeep(settings))
+  const normalizedSettings = toCamel(cloneDeep(settings))
 
   // Extract font config objects
   const fonts = [
@@ -254,26 +230,29 @@ export function getGoogleFontConfig(settings) {
   ]
 
   // Generate families object
-  const families = fonts.reduce((families, { provider, name: rawName, weight }) => {
-    if (provider !== 'Google') return families
-    const name = rawName.replace(/\s/g, '+')
+  const families = fonts.reduce(
+    (families, { provider, name: rawName, weight }) => {
+      if (provider !== 'Google') return families
+      const name = rawName.replace(/\s/g, '+')
 
-    // Avoid duplicate family + weight declarations
-    const nameExists = Object.keys(families).includes(name)
-    const weightExists = nameExists ? families[name].includes(weight) : false
+      // Avoid duplicate family + weight declarations
+      const nameExists = Object.keys(families).includes(name)
+      const weightExists = nameExists ? families[name].includes(weight) : false
 
-    if (nameExists && !weightExists) {
-      // Family has been defined but we need to add another weight
-      families[name].push(weight)
-    } else if (!weightExists) {
-      families[name] = [weight]
-    }
+      if (nameExists && !weightExists) {
+        // Family has been defined but we need to add another weight
+        families[name].push(weight)
+      } else if (!weightExists) {
+        families[name] = [weight]
+      }
 
-    // Order weights because Google with return a 400 otherwise
-    families[name] = families[name].sort()
+      // Order weights because Google with return a 400 otherwise
+      families[name] = families[name].sort()
 
-    return families
-  }, {})
+      return families
+    },
+    {}
+  )
 
   return {
     families,
@@ -480,9 +459,11 @@ function getVariableGroups() {
 // (based on https://github.com/tailwindcss/tailwindcss/blob/master/src/util/flattenColorPalette.js)
 function flattenGroup(groupValue, groupName) {
   const isFontSetting = (name) =>
-    [settingPaths.headingFont, settingPaths.bodyFontNormal, settingPaths.bodyFontBold].includes(
-      `${groupName}.${camelCase(name)}`
-    )
+    [
+      settingPaths.headingFont,
+      settingPaths.bodyFontNormal,
+      settingPaths.bodyFontBold,
+    ].includes(`${groupName}.${camelCase(name)}`)
 
   const flatMapFP = flatMap.convert({ cap: false })
 

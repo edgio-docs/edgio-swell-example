@@ -12,7 +12,8 @@ export function getFilterStateFromQuery(query, filters) {
     filters.forEach(({ id, type }) => {
       if (queryKeys.includes(id)) {
         const queryValue = query[id]
-        const useArray = arrayedTypes.includes(type) && !Array.isArray(queryValue)
+        const useArray =
+          arrayedTypes.includes(type) && !Array.isArray(queryValue)
         filterState[id] = useArray ? [queryValue] : queryValue
       }
     })

@@ -17,7 +17,8 @@ import camelCase from 'lodash/camelCase'
 import SectionLoader from '~/components/SectionLoader'
 import SectionError from '~/components/SectionError'
 
-const capitalCase = (str) => str.charAt(0).toUpperCase() + camelCase(str.slice(1))
+const capitalCase = (str) =>
+  str.charAt(0).toUpperCase() + camelCase(str.slice(1))
 
 export default {
   name: 'SectionAsyncLoader',
@@ -25,7 +26,8 @@ export default {
   props: {
     section: {
       type: Object,
-      default: null,
+      default: () => ({}),
+      required: true,
     },
     collectionFieldId: {
       type: String,
@@ -43,10 +45,10 @@ export default {
 
   computed: {
     component() {
-      if (!this.section) return
-
       return () => ({
-        component: import(`./Section${capitalCase(String(this.section.type))}.vue`),
+        component: import(
+          `./Section${capitalCase(String(this.section.type))}.vue`
+        ),
         loading: SectionLoader,
         error: SectionError,
       })
