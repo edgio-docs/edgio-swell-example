@@ -3,7 +3,16 @@
     <div class="z-50 fixed inset-0">
       <!-- Overlay -->
       <div
-        class="overlay opacity-50 absolute w-full h-full bg-primary-darker hidden md:block"
+        class="
+          overlay
+          opacity-50
+          absolute
+          w-full
+          h-full
+          bg-primary-darker
+          hidden
+          md:block
+        "
         @click="closeCart"
       />
 
@@ -15,14 +24,20 @@
             <div class="flex justify-between items-center">
               <h3>
                 {{ $t('cart.title') }}
-                <span v-if="cart && cart.itemQuantity">({{ cart.itemQuantity }})</span>
+                <span v-if="cart && cart.itemQuantity"
+                  >({{ cart.itemQuantity }})</span
+                >
               </h3>
               <button @click.prevent="closeCart">
                 <BaseIcon icon="uil:multiply" size="lg" />
               </button>
             </div>
 
-            <div v-if="$te('cart.infoText')" class="mt-4 text-sm" v-html="$t('cart.infoText')" />
+            <div
+              v-if="$te('cart.infoText')"
+              class="mt-4 text-sm"
+              v-html="$t('cart.infoText')"
+            />
           </div>
 
           <!-- Items -->
@@ -36,7 +51,11 @@
           </div>
           <div v-else class="container py-10">
             <span class="block mb-4">{{ $t('cart.empty') }}</span>
-            <BaseButton :link="shopLink" :label="$t('cart.backToProducts')" fit="static" />
+            <BaseButton
+              :link="shopLink"
+              :label="$t('cart.backToProducts')"
+              fit="static"
+            />
           </div>
 
           <!-- Footer -->
@@ -81,17 +100,36 @@
                     class="w-7 h-7 relative rounded-full bg-primary-light ml-3"
                     @click="removeDiscount()"
                   >
-                    <BaseIcon class="absolute center-xy" icon="uil:multiply" size="sm" />
+                    <BaseIcon
+                      class="absolute center-xy"
+                      icon="uil:multiply"
+                      size="sm"
+                    />
                   </button>
                 </div>
-                <div v-for="giftcard in cart.giftcards" :key="giftcard.id" class="mt-4">
+                <div
+                  v-for="giftcard in cart.giftcards"
+                  :key="giftcard.id"
+                  class="mt-4"
+                >
                   <p class="label-xs-bold flex items-center">
                     <span>**** **** **** {{ giftcard.last4 }}</span>
                     <button
-                      class="w-7 h-7 relative rounded-full bg-primary-light ml-3"
+                      class="
+                        w-7
+                        h-7
+                        relative
+                        rounded-full
+                        bg-primary-light
+                        ml-3
+                      "
                       @click="removeDiscount(giftcard.id, currency)"
                     >
-                      <BaseIcon class="absolute center-xy" icon="uil:multiply" size="sm" />
+                      <BaseIcon
+                        class="absolute center-xy"
+                        icon="uil:multiply"
+                        size="sm"
+                      />
                     </button>
                   </p>
                   <p class="text-sm">
@@ -115,7 +153,10 @@
                 <span>{{ $t('cart.shipping') }}</span>
                 <span>{{ formatMoney(cart.shipmentTotal, currency) }}</span>
               </div>
-              <div v-show="cart.discountTotal" class="flex justify-between mb-1">
+              <div
+                v-show="cart.discountTotal"
+                class="flex justify-between mb-1"
+              >
                 <span>{{ $t('cart.discounts') }}</span>
                 <span>–{{ formatMoney(cart.discountTotal, currency) }}</span>
               </div>
@@ -129,7 +170,14 @@
               </h3>
               <div
                 v-if="account && account.balance && account.balance > 0"
-                class="flex justify-between mb-1 border-t border-primary-med mt-4 pt-4"
+                class="
+                  flex
+                  justify-between
+                  mb-1
+                  border-t border-primary-med
+                  mt-4
+                  pt-4
+                "
               >
                 <span>{{ $t('cart.accountBalance') }}</span>
                 <span>{{ formatMoney(account.balance, currency) }}</span>
@@ -166,10 +214,10 @@ export default {
     }
   },
 
-  fetch() {
+  async fetch() {
     // Set component data
     const { $swell } = this
-    this.shopLink = $swell.settings.get('cart.shopLink', '/categories/')
+    this.shopLink = await $swell.settings.get('cart.shopLink', '/categories/')
   },
 
   computed: {

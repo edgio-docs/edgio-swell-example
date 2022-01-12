@@ -1,7 +1,8 @@
 <template>
   <footer
     :class="{
-      'bg-primary-darkest text-primary-lightest border-primary-darker': background === 'dark',
+      'bg-primary-darkest text-primary-lightest border-primary-darker':
+        background === 'dark',
       'bg-primary-lighter border-primary-med': background === 'light',
     }"
     class="border-t"
@@ -10,9 +11,12 @@
     <!-- Main footer -->
     <div class="container py-16 text-center lg:flex lg:flex-row lg:text-left">
       <!-- Store info -->
-      <div v-if="footer.showContactInfo || footer.showSocial" class="lg:w-1/4 lg:pr-6">
+      <div
+        v-if="footer.showContactInfo || footer.showSocial"
+        class="lg:w-1/4 lg:pr-6"
+      >
         <div v-if="footer.showContactInfo" class="mb-5">
-          <p v-if="footer.contactInfoHeading" class="text-sm mb-4">
+          <p v-if="footer.contactInfoHeading" class="mb-4 text-sm">
             {{ footer.contactInfoHeading }}
           </p>
           <p>
@@ -27,9 +31,22 @@
         </div>
 
         <!-- Social links-->
-        <ul v-if="footer.showSocial" class="mx-auto lg:-ml-2" data-sw-path="social">
-          <li v-for="link of orderedSocialLinks" :key="link.id" class="inline-block mb-0">
-            <a :href="link.url" target="_blank" :title="`Join us on ${link.id}`" class="block mx-2">
+        <ul
+          v-if="footer.showSocial"
+          class="mx-auto lg:-ml-2"
+          data-sw-path="social"
+        >
+          <li
+            v-for="link of orderedSocialLinks"
+            :key="link.id"
+            class="inline-block mb-0"
+          >
+            <a
+              :href="link.url"
+              target="_blank"
+              :title="`Join us on ${link.id}`"
+              class="block mx-2"
+            >
               <BaseIcon :icon="`mdi:${link.id}`" />
             </a>
           </li>
@@ -49,15 +66,23 @@
               <p
                 v-if="item.type === 'heading'"
                 :class="{ 'mt-6': i > 0 }"
-                class="text-sm text-primary-med mb-3"
+                class="mb-3 text-sm text-primary-med"
               >
                 {{ item.name }}
               </p>
               <!-- Standard link -->
+              <a
+                v-else-if="item.type === 'url'"
+                class="inline-block py-1 text-xl leading-tight"
+                rel="noreferrer noopener"
+                :href="item.value"
+                :target="item.options.target === 'blank' ? '_blank' : '_self'"
+                >{{ item.name }}</a
+              >
               <NuxtLink
                 v-else
                 :to="localePath(resolveUrl(item))"
-                class="inline-block py-1 leading-tight text-xl"
+                class="inline-block py-1 text-xl leading-tight"
               >
                 {{ item.name }}
               </NuxtLink>
@@ -68,13 +93,16 @@
 
       <!-- Email signup -->
       <template v-if="footer.showEmailSignup">
-        <div class="max-w-96 mx-auto lg:w-1/4 lg:flex-shrink-0">
+        <div class="mx-auto max-w-96 lg:w-1/4 lg:flex-shrink-0">
           <!-- Heading + text -->
-          <p v-if="footer.emailSignupHeading" class="text-sm mb-5">
+          <p v-if="footer.emailSignupHeading" class="mb-5 text-sm">
             {{ footer.emailSignupHeading }}
           </p>
           <div v-if="footer.emailSignupText" v-html="footer.emailSignupText" />
-          <EmailSignupForm :theme="background === 'dark' ? 'dark' : 'light'" class="mt-5" />
+          <EmailSignupForm
+            :theme="background === 'dark' ? 'dark' : 'light'"
+            class="mt-5"
+          />
         </div>
       </template>
     </div>
@@ -86,7 +114,7 @@
         'border-primary-darker': background === 'dark',
         'border-primary-med': background === 'light',
       }"
-      class="py-4 border-t border-primary-darker text-sm text-center"
+      class="py-4 text-sm text-center border-t border-primary-darker"
     >
       <div class="container lg:flex lg:flex-no-wrap lg:justify-between">
         <!-- Copyright & Settings -->
@@ -100,11 +128,21 @@
             >Swell</a
           >
         </p>
-
         <!-- Secondary nav menu -->
         <ul v-if="footer.showSecondaryMenu && secondaryMenu" class="my-3">
-          <li v-for="item in secondaryMenu.items" :key="item.name" class="inline-block mx-3 mb-0">
-            <NuxtLink :to="localePath(resolveUrl(item))">
+          <li
+            v-for="item in secondaryMenu.items"
+            :key="item.name"
+            class="inline-block mx-3 mb-0"
+          >
+            <a
+              v-if="item.type === 'url'"
+              rel="noreferrer noopener"
+              :href="item.value"
+              :target="item.options.target === 'blank' ? '_blank' : '_self'"
+              >{{ item.name }}</a
+            >
+            <NuxtLink v-else :to="localePath(resolveUrl(item))">
               {{ item.name }}
             </NuxtLink>
           </li>
@@ -149,27 +187,38 @@ export default {
     }
   },
 
-  fetch() {
+  async fetch() {
     const { $swell } = this
 
     // Get menu settings
-    const menuId = $swell.settings.get('footer.menu', 'footer')
-    const secondaryMenuId = $swell.settings.get('footer.secondaryMenu', 'footer-secondary')
+    const menuId = await $swell.settings.get('footer.menu', 'footer')
+    const secondaryMenuId = await $swell.settings.get(
+      'footer.secondaryMenu',
+      'footer-secondary'
+    )
 
     // Set menus
-    this.menu = $swell.settings.menus(menuId)
-    this.secondaryMenu = $swell.settings.menus(secondaryMenuId)
+    this.menu = await $swell.settings.menus(menuId)
+    this.secondaryMenu = await $swell.settings.menus(secondaryMenuId)
 
     // Set component data
-    this.store = $swell.settings.get('store', {})
-    this.footer = $swell.settings.get('footer', {})
-    this.socialLinks = $swell.settings.get('socialLinks', {})
-    this.background = $swell.settings.get('footer.background', 'dark')
+    this.store = await $swell.settings.get('store', {})
+    this.footer = await $swell.settings.get('footer', {})
+    this.socialLinks = await $swell.settings.get('socialLinks', {})
+    this.background = await $swell.settings.get('footer.background', 'dark')
   },
 
   computed: {
     orderedSocialLinks() {
-      return ['twitter', 'facebook', 'pinterest', 'instagram', 'youtube', 'vimeo']
+      return [
+        'twitter',
+        'facebook',
+        'pinterest',
+        'instagram',
+        'youtube',
+        'vimeo',
+        'whatsapp',
+      ]
         .map((id) => ({ id, ...get(this, `socialLinks.${id}`, {}) })) // Get the network's link value from settings
         .filter((link) => link.show && link.url) // Only include if it's switched on and  has a url
     },

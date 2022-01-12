@@ -1,5 +1,8 @@
 <template>
-  <div class="relative container pt-6 pb-24 md:max-w-112 md:pt-24" @keyup.enter="login">
+  <div
+    class="relative container pt-6 pb-24 md:max-w-112 md:pt-24"
+    @keyup.enter="login"
+  >
     <h2 class="pb-6">{{ $t('account.login.title') }}</h2>
 
     <div class="mb-6">
@@ -17,9 +20,11 @@
           $t('account.login.email.format')
         }}</span>
 
-        <span v-else-if="!$v.email.required" class="label-sm text-error-default">{{
-          $t('account.login.email.required')
-        }}</span>
+        <span
+          v-else-if="!$v.email.required"
+          class="label-sm text-error-default"
+          >{{ $t('account.login.email.required') }}</span
+        >
       </template>
     </div>
 
@@ -35,9 +40,11 @@
       />
 
       <template v-if="$v.password.$dirty">
-        <span v-if="!$v.password.required" class="label-sm text-error-default">{{
-          $t('account.login.password.required')
-        }}</span>
+        <span
+          v-if="!$v.password.required"
+          class="label-sm text-error-default"
+          >{{ $t('account.login.password.required') }}</span
+        >
       </template>
     </div>
 

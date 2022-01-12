@@ -10,5 +10,6 @@ module.exports = {
   includeFiles: {
     config: true,
     modules: true,
+    'static/lang/**/*': true,
   },
 }

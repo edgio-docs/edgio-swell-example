@@ -48,7 +48,14 @@
       <li
         v-for="(option, index) in options"
         :key="`option-${index}`"
-        class="mb-0 px-2 py-3 items-center cursor-pointer hover:bg-primary-lighter"
+        class="
+          mb-0
+          px-2
+          py-3
+          items-center
+          cursor-pointer
+          hover:bg-primary-lighter
+        "
         role="option"
         @click="selectOption(option)"
       >
@@ -106,7 +113,9 @@ export default {
       if (value !== undefined) {
         if (options && options.length > 0) {
           const selected =
-            find(options, value) || find(options, { value }) || find(options, { label: value })
+            find(options, value) ||
+            find(options, { value }) ||
+            find(options, { label: value })
           if (selected !== undefined) {
             this.selected = selected.label || selected
             return
@@ -125,7 +134,9 @@ export default {
     if (value !== undefined) {
       if (options && options.length > 0) {
         const selected =
-          find(options, value) || find(options, { value }) || find(options, { label: value })
+          find(options, value) ||
+          find(options, { value }) ||
+          find(options, { label: value })
         if (selected !== undefined) {
           this.selected = selected.label || selected
           return

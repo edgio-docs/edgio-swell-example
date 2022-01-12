@@ -1,7 +1,9 @@
 import get from 'lodash/get'
 
 const generateMetaImage = (media) => {
-  const src = Array.isArray(media) ? get(media, '0.file.url') : get(media, 'file.url')
+  const src = Array.isArray(media)
+    ? get(media, '0.file.url')
+    : get(media, 'file.url')
   const size = {
     width: 1200,
     height: 630,
@@ -11,12 +13,31 @@ const generateMetaImage = (media) => {
 }
 
 export default {
+  async asyncData({ $swell }) {
+    const storeName = await $swell.settings.get('store.name')
+    const storeUrl = await $swell.settings.get('store.url')
+    const faviconUrl = await $swell.settings.get('header.favicon.file.url')
+
+    return {
+      storeName,
+      storeUrl,
+      faviconUrl,
+    }
+  },
+
   computed: {
     pageMeta() {
-      const { $swell, $route, category, categories, product, products, page } = this
-      const storeName = $swell.settings.get('store.name')
-      const storeUrl = $swell.settings.get('store.url')
-      const faviconUrl = $swell.settings.get('header.favicon.file.url')
+      const {
+        $route,
+        category,
+        categories,
+        product,
+        products,
+        page,
+        storeName,
+        storeUrl,
+        faviconUrl,
+      } = this
       const formatTitle = (itemTitle) => itemTitle + ' - ' + storeName
 
       const meta = {
@@ -103,12 +124,13 @@ export default {
   },
 
   head() {
-    const { storeName, url, title, description, image, link } = this.pageMeta
+    const { pageMeta, structuredData } = this
+    const { storeName, url, title, description, image, link } = pageMeta
     const script = []
 
-    if (this.structuredData) {
+    if (structuredData) {
       script.push({
-        innerHTML: JSON.stringify(this.structuredData),
+        innerHTML: JSON.stringify(structuredData),
         type: 'application/ld+json',
       })
     }

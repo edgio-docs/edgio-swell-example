@@ -27,12 +27,20 @@
         {{ $t('account.addresses.default') }}
       </div>
 
-      <button v-else class="normal-case label-sm-bold" @click="$emit('set-default', address.id)">
+      <button
+        v-else
+        class="normal-case label-sm-bold"
+        @click="$emit('set-default', address.id)"
+      >
         {{ $t('account.addresses.useAsDefault') }}
       </button>
 
       <div class="mt-auto label-sm">
-        <button v-if="!isDefault" class="px-2 mr-2" @click="$emit('delete-address', address.id)">
+        <button
+          v-if="!isDefault"
+          class="px-2 mr-2"
+          @click="$emit('delete-address', address.id)"
+        >
           {{ $t('account.addresses.remove') }}
         </button>
         <button class="px-2" @click="$emit('click-open')">

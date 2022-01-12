@@ -27,7 +27,9 @@
 
           <div class="mb-6">
             <span class="text-lg font-semibold">
-              {{ formatMoney(subscription.recurringTotal, subscription.currency) }}
+              {{
+                formatMoney(subscription.recurringTotal, subscription.currency)
+              }}
               /
               {{ subscription.interval }}
             </span>
@@ -47,7 +49,12 @@
 
         <!-- Allow email contact to edit plan -->
         <a
-          v-if="!allowFrequencyEdit && !allowOptionsEdit && status !== 'canceled' && supportEmail"
+          v-if="
+            !allowFrequencyEdit &&
+            !allowOptionsEdit &&
+            status !== 'canceled' &&
+            supportEmail
+          "
           :href="'mailto:' + supportEmail"
           class="btn light md:w-auto mb-6"
         >
@@ -88,14 +95,21 @@
                 <span>{{ option.name }}: {{ option.value }}</span>
               </p>
               <p class="font-semibold">
-                {{ formatMoney(subscription.recurringTotal, subscription.currency) }}
+                {{
+                  formatMoney(
+                    subscription.recurringTotal,
+                    subscription.currency
+                  )
+                }}
               </p>
             </div>
 
             <!-- Edit plan options -->
           </div>
           <BaseButton
-            v-if="status !== 'canceled' && allowOptionsEdit && planOptions.length"
+            v-if="
+              status !== 'canceled' && allowOptionsEdit && planOptions.length
+            "
             class="block mb-6"
             fit="auto"
             appearance="light"
@@ -118,11 +132,19 @@
       <!-- Change frequency/options popups -->
       <AccountEditOptionsPopup
         v-if="changeFrequencyPopupisActive"
-        :heading="$t('account.subscriptions.id.edit.popup.changeFrequency.title')"
+        :heading="
+          $t('account.subscriptions.id.edit.popup.changeFrequency.title')
+        "
         :text="$t('account.subscriptions.id.edit.popup.changeFrequency.text')"
-        :accept-label="$t('account.subscriptions.id.edit.popup.changeFrequency.yes')"
-        :refuse-label="$t('account.subscriptions.id.edit.popup.changeFrequency.no')"
-        :loading-label="$t('account.subscriptions.id.edit.popup.changeFrequency.loading')"
+        :accept-label="
+          $t('account.subscriptions.id.edit.popup.changeFrequency.yes')
+        "
+        :refuse-label="
+          $t('account.subscriptions.id.edit.popup.changeFrequency.no')
+        "
+        :loading-label="
+          $t('account.subscriptions.id.edit.popup.changeFrequency.loading')
+        "
         :options="subscriptionOptions"
         :option-state="optionState"
         :is-updating="isUpdating"
@@ -134,9 +156,15 @@
       <AccountEditOptionsPopup
         v-if="changeOptionsPopupisActive"
         :heading="$t('account.subscriptions.id.edit.popup.changeOptions.title')"
-        :accept-label="$t('account.subscriptions.id.edit.popup.changeOptions.yes')"
-        :refuse-label="$t('account.subscriptions.id.edit.popup.changeOptions.no')"
-        :loading-label="$t('account.subscriptions.id.edit.popup.changeOptions.loading')"
+        :accept-label="
+          $t('account.subscriptions.id.edit.popup.changeOptions.yes')
+        "
+        :refuse-label="
+          $t('account.subscriptions.id.edit.popup.changeOptions.no')
+        "
+        :loading-label="
+          $t('account.subscriptions.id.edit.popup.changeOptions.loading')
+        "
         :options="planOptions"
         :option-state="optionState"
         :is-updating="isUpdating"
@@ -182,6 +210,7 @@ export default {
       isUpdating: false,
       allowFrequencyEdit: true,
       allowOptionsEdit: true,
+      supportEmail: '',
     }
   },
 
@@ -199,8 +228,16 @@ export default {
 
     // Set component data
     this.subscription = subscription
-    this.allowFrequencyEdit = $swell.settings.get('account.subscriptions.allowFrequencyEdit', false)
-    this.allowOptionsEdit = $swell.settings.get('account.subscriptions.allowOptionsEdit', false)
+    this.allowFrequencyEdit = await $swell.settings.get(
+      'account.subscriptions.allowFrequencyEdit',
+      false
+    )
+    this.allowOptionsEdit = await $swell.settings.get(
+      'account.subscriptions.allowOptionsEdit',
+      false
+    )
+
+    this.supportEmail = await $swell.settings.get('store.supportEmail')
 
     // Compute initial values for options
     this.resetOptionValues()
@@ -208,10 +245,6 @@ export default {
 
   computed: {
     ...mapState(['currency']),
-
-    supportEmail() {
-      return this.$swell.settings.get('store.supportEmail')
-    },
 
     subscriptionName() {
       if (!this.subscription) return
@@ -223,7 +256,10 @@ export default {
     },
 
     planOptions() {
-      return filter(this.subscription.product.options, (option) => !option.subscription)
+      return filter(
+        this.subscription.product.options,
+        (option) => !option.subscription
+      )
     },
 
     planThumbnail() {
@@ -260,7 +296,9 @@ export default {
         (options, { name, values, id }) => {
           // If option has been set, select for current option,
           // otherwise fallback to first available option
-          const matched = this.subscription.options?.find((option) => option.id === id)
+          const matched = this.subscription.options?.find(
+            (option) => option.id === id
+          )
           options[name] = matched ? matched.value : get(values, '0.name')
 
           return options
@@ -312,7 +350,9 @@ export default {
 
       for (const key in optionState) {
         const value = optionState[key]
-        const { id } = this.subscription.product.options.find((option) => option.name === key)
+        const { id } = this.subscription.product.options.find(
+          (option) => option.name === key
+        )
         options.push({ id, value })
       }
 
@@ -325,8 +365,12 @@ export default {
       this.$store.dispatch('showNotification', {
         message:
           type === 'frequency'
-            ? this.$t('account.subscriptions.id.edit.popup.changeFrequency.success')
-            : this.$t('account.subscriptions.id.edit.popup.changeOptions.success'),
+            ? this.$t(
+                'account.subscriptions.id.edit.popup.changeFrequency.success'
+              )
+            : this.$t(
+                'account.subscriptions.id.edit.popup.changeOptions.success'
+              ),
         type: 'success',
       })
       this.$fetch()

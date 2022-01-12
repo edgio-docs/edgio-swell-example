@@ -1,12 +1,8 @@
-import { get } from 'lodash'
 import swell from 'swell-js'
-import settingsJson from '~/config/settings.json'
-import menusJson from '~/config/menus.json'
 
-export default (context, inject) => {
-  const settings = settingsJson || {}
-  const storeId = '<%= options.storeId || "" %>' || get(settings, 'store.id')
-  const publicKey = '<%= options.publicKey || "" %>' || get(settings, 'store.public_key')
+export default async (context, inject) => {
+  const storeId = '<%= options.storeId || "" %>'
+  const publicKey = '<%= options.publicKey || "" %>'
 
   // Bail if options aren't provided
   if (!storeId) {
@@ -18,6 +14,10 @@ export default (context, inject) => {
 
   // Load cookies on server side
   const cookies = parseCookies(context.req)
+  const locale =
+    cookies['swell-locale'] ||
+    context.i18n.localeProperties.code ||
+    '<%= options.settings.store.locale || "" %>'
 
   // Set up swell-js client
   swell.init(storeId, publicKey, {
@@ -25,15 +25,15 @@ export default (context, inject) => {
     previewContent: '<%= options.previewContent %>' === 'true',
     url: '<%= options.storeUrl %>',
     session: cookies['swell-session'],
-    locale: cookies['swell-locale'],
     currency: cookies['swell-currency'],
+    locale,
   })
 
-  // Inject client into nuxt context as $swell
-  context.$swell = swell
-  context.$swell.settings.state = settingsJson
-  context.$swell.settings.menuState = menusJson
+  await swell.locale.select(locale)
 
+  await swell.settings.load()
+
+  // Inject client into nuxt context as $swell
   inject('swell', swell)
 }
 

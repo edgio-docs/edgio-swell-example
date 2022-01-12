@@ -2,7 +2,10 @@
   <div>
     <div class="container">
       <!-- Breadcrumb -->
-      <NuxtLink :to="localePath('/account/orders/')" class="flex items-center cursor-pointer mb-6">
+      <NuxtLink
+        :to="localePath('/account/orders/')"
+        class="flex items-center cursor-pointer mb-6"
+      >
         <BaseIcon icon="uil:angle-left" size="sm" /><span class="ml-1">{{
           $t('account.orders.id.backToOrders')
         }}</span>
@@ -19,7 +22,9 @@
     <div v-else>
       <div class="container">
         <div class="pb-6 border-b border-primary-med mb-10">
-          <h2 class="text-2xl">{{ $t('account.orders.id.order') }} #{{ order.number }}</h2>
+          <h2 class="text-2xl">
+            {{ $t('account.orders.id.order') }} #{{ order.number }}
+          </h2>
 
           <div class="my-4">
             <svg
@@ -27,7 +32,8 @@
               :class="{
                 'text-ok-default': order.status === 'complete',
                 'text-error-default': order.status === 'canceled',
-                'text-primary-dark': order.status !== 'complete' || order.status !== 'canceled',
+                'text-primary-dark':
+                  order.status !== 'complete' || order.status !== 'canceled',
               }"
               fill="none"
               viewBox="0 0 10 10"
@@ -51,7 +57,9 @@
           >
             <div class="pb-2 md:pb-0">
               <span>{{ $t('account.orders.id.orderDate') }}</span>
-              <span class="font-semibold">{{ formatDate(order.dateCreated) }}</span>
+              <span class="font-semibold">{{
+                formatDate(order.dateCreated)
+              }}</span>
             </div>
 
             <!-- <div class="pb-2 md:pb-0">
@@ -61,7 +69,9 @@
 
             <div>
               <span>{{ $t('account.orders.id.total') }}</span>
-              <span class="font-semibold">{{ formatMoney(order.grandTotal, order.currency) }}</span>
+              <span class="font-semibold">{{
+                formatMoney(order.grandTotal, order.currency)
+              }}</span>
             </div>
           </div>
 
@@ -94,7 +104,11 @@
             >
               <div class="min-w-26 mr-6">
                 <VisualMedia
-                  v-if="item.product.images && item.product.images.length"
+                  v-if="
+                    item.product &&
+                    item.product.images &&
+                    item.product.images.length
+                  "
                   :source="item.product.images[0].file"
                   sizes="120px"
                 />
@@ -109,54 +123,90 @@
 
               <div>
                 <h4 class="pb-2">
-                  {{ item.product.name }}
+                  {{ item.product ? item.product.name : '-' }}
                 </h4>
-                <p v-if="item.quantity > 1" class="text-sm text-primary-darker">
-                  {{
-                    $tc('account.orders.id.quantity', item.quantity, {
-                      count: item.quantity,
-                    })
-                  }}
-                </p>
-                <p
-                  v-for="option in item.options"
-                  :key="option.od"
-                  class="text-sm text-primary-darker"
-                >
-                  <span>{{ option.name }}: {{ option.value }}</span>
-                </p>
-                <p class="pt-2 font-semibold text-sm">
-                  {{ formatMoney(item.priceTotal, order.currency) }}
-                </p>
+                <div class="text-sm">
+                  <p v-if="item.quantity > 1">
+                    {{
+                      $tc('account.orders.id.quantity', item.quantity, {
+                        count: item.quantity,
+                      })
+                    }}
+                  </p>
+                  <p v-for="option in item.options" :key="option.id">
+                    <span>{{ option.name }}: {{ option.value }}</span>
+                  </p>
+
+                  <div
+                    v-if="item.bundleItems && item.bundleItems.length"
+                    class="pt-2"
+                  >
+                    <p class="font-semibold">
+                      {{ $t('account.orders.id.bundleIncludes') }}
+                    </p>
+                    <div
+                      v-for="bundleItem in item.bundleItems"
+                      :key="bundleItem.id"
+                    >
+                      <p>
+                        {{ bundleItem.product.name }}
+                        <span v-if="bundleItem.quantity > 1">
+                          × {{ bundleItem.quantity }}
+                        </span>
+                      </p>
+
+                      <p
+                        v-for="option in bundleItem.options"
+                        :key="option.id"
+                        class="pl-4"
+                      >
+                        <span>{{ option.name }}: {{ option.value }}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <p class="pt-2 font-semibold">
+                    {{ formatMoney(item.priceTotal, order.currency) }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="flex pb-2">
             <span>{{ $t('account.orders.id.subtotal') }}</span>
-            <span class="ml-auto">{{ formatMoney(order.subTotal, order.currency) }}</span>
+            <span class="ml-auto">{{
+              formatMoney(order.subTotal, order.currency)
+            }}</span>
           </div>
 
           <div v-if="order.shipmentDelivery" class="flex pb-2">
             <span>{{ $t('account.orders.id.shipping') }}</span>
             <span class="ml-auto">{{
-              order.shipmentPrice === 0 ? 'Free' : formatMoney(order.shipmentPrice, order.currency)
+              order.shipmentPrice === 0
+                ? 'Free'
+                : formatMoney(order.shipmentPrice, order.currency)
             }}</span>
           </div>
 
           <div v-if="order.itemDiscount > 0" class="flex pb-2">
             <span>{{ $t('account.orders.id.discountsAndCredits') }}</span>
-            <span class="ml-auto">-{{ formatMoney(order.itemDiscount, order.currency) }}</span>
+            <span class="ml-auto"
+              >-{{ formatMoney(order.itemDiscount, order.currency) }}</span
+            >
           </div>
 
           <div v-if="order.taxTotal > 0" class="flex pb-2">
             <span>{{ $t('account.orders.id.taxes') }}</span>
-            <span class="ml-auto">{{ formatMoney(order.taxTotal, order.currency) }}</span>
+            <span class="ml-auto">{{
+              formatMoney(order.taxTotal, order.currency)
+            }}</span>
           </div>
 
           <div class="flex text-lg font-semibold">
             <span>{{ $t('account.orders.id.total') }}</span>
-            <span class="ml-auto">{{ formatMoney(order.grandTotal, order.currency) }}</span>
+            <span class="ml-auto">{{
+              formatMoney(order.grandTotal, order.currency)
+            }}</span>
           </div>
         </div>
       </div>
@@ -175,12 +225,15 @@
               </p>
               <p>
                 {{ shipping.name }}<br />
-                {{ shipping.address2 }} {{ shipping.address1 }}, {{ shipping.city }}
-                {{ shipping.zip }}<br />
+                {{ shipping.address2 }} {{ shipping.address1 }},
+                {{ shipping.city }} {{ shipping.zip }}<br />
                 {{ shipping.state }} {{ shipping.country }}
               </p>
             </div>
-            <div v-if="shipping.phone" class="rounded text-sm border border-primary-med p-4 -mt-px">
+            <div
+              v-if="shipping.phone"
+              class="rounded text-sm border border-primary-med p-4 -mt-px"
+            >
               <p class="font-semibold pb-2">
                 {{ $t('account.orders.id.phoneNumber') }}
               </p>
@@ -199,33 +252,47 @@
                 </span>
               </p>
             </div>
-            <div v-if="shipments" class="rounded text-sm border border-primary-med p-4 -mt-px">
+            <div
+              v-if="shipments"
+              class="rounded text-sm border border-primary-med p-4 -mt-px"
+            >
               <p class="font-semibold pb-2">
                 {{ $t('account.orders.id.fulfilledDeliveries') }}
               </p>
-              <div v-for="shipment in shipments" :key="shipment.id" class="mb-4">
+              <div
+                v-for="shipment in shipments"
+                :key="shipment.id"
+                class="mb-4"
+              >
                 <div class="grid grid-cols-2-max">
                   <strong class="pr-4 capitalize">{{
                     $tc('account.orders.id.items', shipment.items.length)
                   }}</strong>
                   <div>
                     <p v-for="item in shipment.items" :key="item.id">
-                      {{ item.quantity }} × {{ item.product.name }}
+                      {{ item.quantity }} ×
+                      {{ item.product ? item.product.name : '-' }}
                     </p>
                   </div>
 
                   <template v-if="shipment.carrierName">
-                    <strong class="pr-4">{{ $t('account.orders.id.carrier') }}</strong>
+                    <strong class="pr-4">{{
+                      $t('account.orders.id.carrier')
+                    }}</strong>
                     <div>{{ shipment.carrierName }}</div>
                   </template>
 
                   <template v-if="shipment.trackingCode">
-                    <strong class="pr-4">{{ $t('account.orders.id.trackingCode') }}</strong>
+                    <strong class="pr-4">{{
+                      $t('account.orders.id.trackingCode')
+                    }}</strong>
                     <div>{{ shipment.trackingCode }}</div>
                   </template>
 
                   <template v-if="shipment.dateCreated">
-                    <strong class="pr-4">{{ $t('account.orders.id.dateShipped') }}</strong>
+                    <strong class="pr-4">{{
+                      $t('account.orders.id.dateShipped')
+                    }}</strong>
                     <div>{{ formatDate(shipment.dateCreated) }}</div>
                   </template>
                 </div>
@@ -240,17 +307,29 @@
                 {{ $t('account.orders.id.paymentMethod') }}
               </p>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 rounded border border-primary-med">
+              <div
+                class="
+                  grid grid-cols-1
+                  md:grid-cols-2
+                  rounded
+                  border border-primary-med
+                "
+              >
                 <!-- Method: Card -->
                 <div
                   v-if="billing.card && billing.method === 'card'"
-                  class="md:border-b-0 md:border-r border-b border-primary-med p-4"
+                  class="
+                    md:border-b-0 md:border-r
+                    border-b border-primary-med
+                    p-4
+                  "
                 >
                   <div class="flex mb-4">
                     <BrandCardIcon :brand="billing.card.brand" />
-                    <span class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold">{{
-                      billing.card.brand
-                    }}</span>
+                    <span
+                      class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold"
+                      >{{ billing.card.brand }}</span
+                    >
                   </div>
 
                   <div class="flex mb-4">
@@ -268,13 +347,18 @@
                 <!-- Method: Account Credit -->
                 <div
                   v-else-if="billing.method === 'account'"
-                  class="md:border-b-0 md:border-r border-b border-primary-med p-4"
+                  class="
+                    md:border-b-0 md:border-r
+                    border-b border-primary-med
+                    p-4
+                  "
                 >
                   <div class="flex mb-4">
                     <BaseIcon icon="uil:money-bill" />
-                    <span class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold">{{
-                      $t('account.orders.id.accountCredit')
-                    }}</span>
+                    <span
+                      class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold"
+                      >{{ $t('account.orders.id.accountCredit') }}</span
+                    >
                   </div>
                   <p>{{ $t('account.orders.id.accountCreditMessage') }}</p>
                 </div>
@@ -282,13 +366,18 @@
                 <!-- Method: Gift Card -->
                 <div
                   v-else-if="billing.method === 'giftcard' && order.giftcards"
-                  class="md:border-b-0 md: border-r border-b border-primary-med p-4"
+                  class="
+                    md:border-b-0 md:
+                    border-r border-b border-primary-med
+                    p-4
+                  "
                 >
                   <div class="flex mb-4">
                     <BaseIcon icon="uil:gift" />
-                    <span class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold">{{
-                      $t('account.orders.id.giftCard')
-                    }}</span>
+                    <span
+                      class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold"
+                      >{{ $t('account.orders.id.giftCard') }}</span
+                    >
                   </div>
 
                   <p class="text-base tracking-large">
@@ -298,21 +387,30 @@
                   </p>
 
                   <p class="text-sm pt-4">
-                    <span class="font-semibold pr-2">{{ $t('account.orders.id.total') }}</span
-                    ><span>{{ formatMoney(order.giftcardTotal, order.currency) }}</span>
+                    <span class="font-semibold pr-2">{{
+                      $t('account.orders.id.total')
+                    }}</span
+                    ><span>{{
+                      formatMoney(order.giftcardTotal, order.currency)
+                    }}</span>
                   </p>
                 </div>
 
                 <!-- Method: Bank Deposit -->
                 <div
                   v-else-if="billing.method === 'bank_deposit'"
-                  class="md:border-b-0 md:border-r border-b border-primary-med p-4"
+                  class="
+                    md:border-b-0 md:border-r
+                    border-b border-primary-med
+                    p-4
+                  "
                 >
                   <div class="flex mb-4">
                     <BaseIcon icon="uil:University" />
-                    <span class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold">{{
-                      $t('account.orders.id.bankDeposit')
-                    }}</span>
+                    <span
+                      class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold"
+                      >{{ $t('account.orders.id.bankDeposit') }}</span
+                    >
                   </div>
                   <p>{{ $t('account.orders.id.bankDepositMessage') }}</p>
                 </div>
@@ -320,13 +418,18 @@
                 <!-- Method: Cash on delivery -->
                 <div
                   v-else-if="billing.method === 'cash_on_delivery'"
-                  class="md:border-b-0 md: border-r border-b border-primary-med p-4"
+                  class="
+                    md:border-b-0 md:
+                    border-r border-b border-primary-med
+                    p-4
+                  "
                 >
                   <div class="flex mb-4">
                     <BaseIcon icon="uil:money-bill" />
-                    <span class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold">{{
-                      $t('account.orders.id.cashOnDelivery')
-                    }}</span>
+                    <span
+                      class="ml-auto md:pl-4 md:ml-0 text-sm font-semibold"
+                      >{{ $t('account.orders.id.cashOnDelivery') }}</span
+                    >
                   </div>
                   <p>{{ $t('account.orders.id.cashOnDeliveryMessage') }}</p>
                 </div>
@@ -337,8 +440,8 @@
                   </p>
                   <p>
                     {{ billing.name }}<br />
-                    {{ billing.address2 }} {{ billing.address1 }}, {{ billing.city }}
-                    {{ billing.zip }}<br />
+                    {{ billing.address2 }} {{ billing.address1 }},
+                    {{ billing.city }} {{ billing.zip }}<br />
                     {{ billing.state }} {{ billing.country }}
                   </p>
                 </div>

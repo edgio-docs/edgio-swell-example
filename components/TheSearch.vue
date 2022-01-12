@@ -1,6 +1,16 @@
 <template>
   <transition name="fade" appear>
-    <div class="z-40 fixed inset-0 w-full h-full bg-primary-lightest overflow-y-scroll">
+    <div
+      class="
+        z-40
+        fixed
+        inset-0
+        w-full
+        h-full
+        bg-primary-lightest
+        overflow-y-scroll
+      "
+    >
       <transition name="fade-up-out">
         <TheToastNotification
           v-if="notification"

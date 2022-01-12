@@ -19,13 +19,18 @@
       <div v-if="type === 'compact'" class="flex justify-between items-center">
         <p class="text-sm">
           {{ $t('notifications.cookies.message') }}
-          <NuxtLink :to="localePath(resolveUrl({ type: 'page', value: 'privacy-policy' }))">
+          <NuxtLink
+            :to="
+              localePath(resolveUrl({ type: 'page', value: 'privacy-policy' }))
+            "
+          >
             {{ $t('notifications.cookies.privacy') }}
           </NuxtLink>
         </p>
         <button
           type="button"
           class="w-8 h-8 rounded-full bg-primary-light ml-3 p-1"
+          :aria-label="$t('notifications.cookies.close')"
           @click="acceptCookies"
         >
           <BaseIcon icon="uil:times" />
@@ -82,12 +87,11 @@ export default {
     },
     acceptCookies() {
       this.showCookieNotification = false
-      this.$store.commit('setState', {
-        key: 'cookiesAreAccepted',
-        value: true,
-      })
+      this.$store.commit('setState', { key: 'cookiesAreAccepted', value: true })
       const daysToExpire = 365
-      document.cookie = `cookiesAccepted=true; max-age=${daysToExpire * 60 * 60 * 1000}; path=/;`
+      document.cookie = `cookiesAccepted=true; max-age=${
+        daysToExpire * 60 * 60 * 1000
+      }; path=/;`
     },
   },
 }

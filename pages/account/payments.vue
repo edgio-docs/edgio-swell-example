@@ -90,7 +90,8 @@ export default {
     // Set page data
     const { results: cards } = await this.$swell.account.listCards()
 
-    if (this.customer.billing) this.defaultCardId = this.customer.billing.accountCardId
+    if (this.customer.billing)
+      this.defaultCardId = this.customer.billing.accountCardId
     this.cards = cards
   },
 
@@ -113,8 +114,17 @@ export default {
       try {
         this.isCreating = true
 
-        const { firstName, lastName, address1, address2, city, state, zip, country, isDefault } =
-          address
+        const {
+          firstName,
+          lastName,
+          address1,
+          address2,
+          city,
+          state,
+          zip,
+          country,
+          isDefault,
+        } = address
 
         const accountAddress = await this.$swell.account.createAddress({
           name: `${firstName.trim()} ${lastName.trim()}`,

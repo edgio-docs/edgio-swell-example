@@ -12,6 +12,8 @@ export const state = () => ({
   headerIsVisible: true,
   headerHeight: 0,
   addedItem: null,
+  quickViewIsVisible: false,
+  quickViewProductId: null,
 })
 
 export const actions = {
@@ -27,6 +29,72 @@ export const actions = {
     } catch (err) {
       dispatch('handleError', err)
     }
+  },
+
+  /**
+   * Check if a product is in stock to be added/modified within the cart
+   * @property {Object} item - The product or cart item
+   * @property {string} id - The cart item id
+   * @property {number} quantityToAdd - The quantity to add to cart
+   */
+  async checkCartItemHasStock({ state }, { item, id }) {
+    // Get cart items
+    const items = state.cart?.items
+
+    let cartItem
+    let stockPurchasable
+    let stockTracking
+    let stockLevel
+    let product
+    let currentQuantity = 0
+
+    const quantityToAdd = item ? item.quantity : 1
+
+    if (item) {
+      product = await this.$swell.products.get(item.productId)
+    } else if (id) {
+      product = await this.$swell.products.get(id)
+    }
+
+    if (!product) throw new Error('Product in cart could not be found.')
+
+    if (items) {
+      let variant
+      // If a product item is provided
+      if (item) variant = this.$swell.products.variation(product, item.options)
+      cartItem = items.find((item) => {
+        if (id) {
+          return item.id === id
+        } else if (item) {
+          return item.variant
+            ? item.variantId === variant?.variantId
+            : item.productId === variant?.id
+        }
+        return null
+      })
+    }
+
+    // Get stock availability of cart item
+    if (cartItem) {
+      stockPurchasable = cartItem.product.stockPurchasable
+      stockTracking = cartItem.product.stockTracking
+      stockLevel = cartItem.product.stockLevel
+      // If variant, get respective stock level
+      if (cartItem.variant) {
+        stockLevel = cartItem.variant.stockLevel
+      }
+      currentQuantity = cartItem.quantity
+    } else {
+      // Get stock availability of product to be added
+      stockPurchasable = product.stockPurchasable
+      stockTracking = product.stockTracking
+      stockLevel = product.stockLevel
+    }
+
+    // If product is purchasable out of stock or doesn't track stock, allow add to cart
+    if (stockPurchasable || !stockTracking) return true
+    if (currentQuantity + quantityToAdd > stockLevel) return false
+    return true
   },
 
   /**
@@ -49,18 +117,37 @@ export const actions = {
     commit('setState', { key: 'cartIsUpdating', value: true })
 
     try {
+      // Check if validate stock on add is active
+      const validateCartStock = this.$swell.settings.get('cart.validateStock')
+
+      if (validateCartStock) {
+        try {
+          const cartItemHasStock = await dispatch('checkCartItemHasStock', {
+            item,
+          })
+
+          if (!cartItemHasStock) {
+            commit('setState', { key: 'cartIsUpdating', value: false })
+            throw new Error('invalid_stock')
+          }
+        } catch (err) {
+          throw new Error(err.message)
+        }
+      }
+
       // Make Swell API call
       const cart = await this.$swell.cart.addItem(item)
+
+      if (cart.errors) {
+        dispatch('handleModelErrors', cart.errors)
+        commit('setState', { key: 'cartIsUpdating', value: false })
+        return
+      }
+
       // Replace cart state
       commit('setState', { key: 'cart', value: cart })
       // Set item to be displayed in the notification
       commit('setState', { key: 'addedItem', value: item })
-
-      if (cart.errors) {
-        dispatch('handleError', cart.errors.items)
-        commit('setState', { key: 'cartIsUpdating', value: false })
-        return
-      }
 
       if (state.notification !== null) {
         // If notification is already visible, close it to show new notification
@@ -82,6 +169,7 @@ export const actions = {
         })
       }
     } catch (err) {
+      if (err.message === 'invalid_stock') throw new Error('invalid_stock')
       dispatch('handleError', err)
     }
 
@@ -215,7 +303,10 @@ export const actions = {
    * @param {string} type - Type of notification for styling purposes
    * @param {boolean} isSticky - Whether notification requires manually closing
    */
-  showNotification({ commit, state }, { message, type = 'confirmation', isSticky = false } = {}) {
+  showNotification(
+    { commit, state },
+    { message, type = 'confirmation', isSticky = false } = {}
+  ) {
     // If non-product notification, set addedItem as null
     if (type !== 'product') {
       commit('setState', { key: 'addedItem', value: null })
@@ -249,7 +340,23 @@ export const actions = {
       console.log(error)
     } else {
       // Otherwise log with reporting tool
-      this.$sentry.captureException(error)
+      this.$sentry?.captureException(error)
+    }
+  },
+
+  /**
+   * Handles a model error object which is keyed by field
+   *
+   * @param {error} errors - Model errors object
+   */
+  handleModelErrors({ dispatch }, errors) {
+    if (!errors || typeof errors !== 'object') return
+    // Loop over error keys and handle the first one
+    for (const key of Object.keys(errors)) {
+      if (errors[key] && errors[key].message) {
+        dispatch('handleError', errors[key])
+        return
+      }
     }
   },
 }

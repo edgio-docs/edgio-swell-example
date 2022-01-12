@@ -20,15 +20,17 @@
           transition
           focus:shadow-outline
         "
-        placeholder="Email address"
+        :placeholder="$t('emailSignup.placeholder')"
         @input="delayTouch($v.email)"
       />
       <button
         :class="{
-          'text-primary-lightest bg-primary-darker hover:text-accent-default': theme === 'dark',
+          'text-primary-lightest bg-primary-darker hover:text-accent-default':
+            theme === 'dark',
         }"
         class="btn-icon absolute top-1 right-1"
         type="button"
+        :aria-label="$t('emailSignup.send')"
         @click="subscribe()"
       >
         <div v-if="status === 'COMPLETE'">
@@ -40,14 +42,26 @@
         <div v-if="status === 'READY'">
           <BaseIcon icon="uil:angle-right" class="m-auto" />
         </div>
-        <div v-if="status === 'PENDING'" class="spinner center-xy w-5 h-5 bg-primary-dark" />
+        <div
+          v-if="status === 'PENDING'"
+          class="spinner center-xy w-5 h-5 bg-primary-dark"
+        />
       </button>
     </div>
     <!-- Validation error -->
     <transition name="fade">
       <div
         v-show="errorMessage"
-        class="absolute mt-1 px-3 py-1 w-full bg-error-faded text-error-default text-sm rounded"
+        class="
+          absolute
+          mt-1
+          px-3
+          py-1
+          w-full
+          bg-error-faded
+          text-error-default text-sm
+          rounded
+        "
       >
         {{ errorMessage }}
       </div>
@@ -127,7 +141,7 @@ export default {
           if (this.isDev) {
             console.log(err)
           } else {
-            this.$sentry.captureException(err)
+            this.$sentry?.captureException(err)
           }
           this.status = 'ERROR'
           this.errors = [err]

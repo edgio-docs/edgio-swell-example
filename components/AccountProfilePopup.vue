@@ -40,13 +40,19 @@
                 autocomplete="given-name"
               />
               <template v-if="$v.firstName.$dirty">
-                <span v-if="!$v.firstName.required" class="label-sm text-error-default">{{
-                  $t('account.popup.firstName.required')
-                }}</span>
+                <span
+                  v-if="!$v.firstName.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.popup.firstName.required') }}</span
+                >
 
-                <span v-if="!$v.firstName.maxLength" class="label-sm text-error-default">{{
-                  $t('account.popup.firstName.maxLength', { n: 40 })
-                }}</span>
+                <span
+                  v-if="!$v.firstName.maxLength"
+                  class="label-sm text-error-default"
+                  >{{
+                    $t('account.popup.firstName.maxLength', { n: 40 })
+                  }}</span
+                >
               </template>
             </div>
 
@@ -59,13 +65,17 @@
                 autocomplete="family-name"
               />
               <template v-if="$v.lastName.$dirty">
-                <span v-if="!$v.lastName.required" class="label-sm text-error-default">{{
-                  $t('account.popup.lastName.required')
-                }}</span>
+                <span
+                  v-if="!$v.lastName.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.popup.lastName.required') }}</span
+                >
 
-                <span v-if="!$v.lastName.maxLength" class="label-sm text-error-default">{{
-                  $t('account.popup.lastName.maxLength', { n: 40 })
-                }}</span>
+                <span
+                  v-if="!$v.lastName.maxLength"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.popup.lastName.maxLength', { n: 40 }) }}</span
+                >
               </template>
             </div>
 
@@ -80,13 +90,17 @@
               />
 
               <template v-if="$v.email.$dirty">
-                <span v-if="!$v.email.email" class="label-sm text-error-default">{{
-                  $t('account.popup.email.format')
-                }}</span>
+                <span
+                  v-if="!$v.email.email"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.popup.email.format') }}</span
+                >
 
-                <span v-else-if="!$v.email.required" class="label-sm text-error-default">{{
-                  $t('account.popup.email.required')
-                }}</span>
+                <span
+                  v-else-if="!$v.email.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.popup.email.required') }}</span
+                >
               </template>
             </div>
 
@@ -103,13 +117,17 @@
               />
 
               <template v-if="$v.password.$dirty">
-                <span v-if="!$v.password.minLength" class="label-sm text-error-default">{{
-                  $t('account.popup.password.minLength', { n: 6 })
-                }}</span>
+                <span
+                  v-if="!$v.password.minLength"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.popup.password.minLength', { n: 6 }) }}</span
+                >
 
-                <span v-if="!$v.password.required" class="label-sm text-error-default">{{
-                  $t('account.popup.password.required')
-                }}</span>
+                <span
+                  v-if="!$v.password.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.popup.password.required') }}</span
+                >
               </template>
             </div>
 
@@ -179,7 +197,13 @@
 <script>
 import { mapState } from 'vuex'
 import { validationMixin } from 'vuelidate'
-import { required, email, maxLength, minLength, sameAs } from 'vuelidate/lib/validators'
+import {
+  required,
+  email,
+  maxLength,
+  minLength,
+  sameAs,
+} from 'vuelidate/lib/validators'
 
 export default {
   mixins: [validationMixin],

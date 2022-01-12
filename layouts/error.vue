@@ -3,7 +3,14 @@
     <div class="container mx-auto md:px-40 my-16 content-center">
       <span
         v-if="error.statusCode"
-        class="mx-auto text-center uppercase label-xs-bold-faded leading-none max-w-128"
+        class="
+          mx-auto
+          text-center
+          uppercase
+          label-xs-bold-faded
+          leading-none
+          max-w-128
+        "
       >
         {{ $t('errors.errorCode', { code: error.statusCode }) }}
       </span>
@@ -36,7 +43,16 @@
           <a
             href="#"
             title="Reload"
-            class="w-full inline-block mt-6 px-6 py-3 uppercase tracking-wide bg-primary-lighter"
+            class="
+              w-full
+              inline-block
+              mt-6
+              px-6
+              py-3
+              uppercase
+              tracking-wide
+              bg-primary-lighter
+            "
             @click.prevent="reload()"
             >{{ $t('errors.internal.reload') }}</a
           >
@@ -69,14 +85,12 @@ export default {
           async: true,
           body: true,
         },
+      ],
+      link: [
         {
-          type: 'text/javascript',
-          innerHTML: this.$swell.settings.get('scripts.global.head'),
-        },
-        {
-          type: 'text/javascript',
-          innerHTML: this.$swell.settings.get('scripts.global.body'),
-          body: true,
+          rel: 'preconnect',
+          href: process.env.cdnHost,
+          crossorigin: true,
         },
       ],
     }

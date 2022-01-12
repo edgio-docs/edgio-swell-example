@@ -1,6 +1,8 @@
 <template>
   <div>
-    <label v-if="label" class="label-xs-bold-faded block mb-2">{{ label }}</label>
+    <label v-if="label" class="label-xs-bold-faded block mb-2">{{
+      label
+    }}</label>
     <input
       class="tracking-inherit"
       :type="type"
@@ -12,7 +14,9 @@
       @input="$emit('input', $event.target.value)"
     />
 
-    <span v-if="hint" class="inline-block text-sm text-primary-dark mt-1">{{ hint }}</span>
+    <span v-if="hint" class="inline-block text-sm text-primary-dark mt-1">{{
+      hint
+    }}</span>
   </div>
 </template>
 

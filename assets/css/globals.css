@@ -12,14 +12,10 @@ button {
   }
 }
 
-@responsive {
-  .container {
-    @apply mx-auto px-6 lg:px-8 xl:px-10;
-  }
-}
-
 .btn {
-  @apply relative inline-block h-10 px-5 py-3 rounded bg-primary-light text-sm leading-tight text-center font-semibold tracking-wide uppercase cursor-pointer;
+  @apply relative inline-block h-10 px-5 py-3 
+         rounded bg-primary-light text-sm leading-tight 
+         text-center font-semibold tracking-wide uppercase cursor-pointer;
 
   &:hover {
     @apply bg-primary-darker text-primary-lightest;
@@ -146,6 +142,11 @@ img {
   }
 }
 
+.grid-icon-label {
+  @apply w-full grid gap-3 items-center md:justify-center;
+  grid-template-columns: 1.25rem auto;
+}
+
 .label-tag {
   @apply ml-1 px-2 py-1 uppercase text-2xs rounded font-semibold leading-tight;
 }
@@ -188,5 +189,23 @@ img {
     &:hover {
       opacity: 1;
     }
+  }
+}
+
+/* Remove spin buttons for input number (Chrome, Safari, Edge, Opera) */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove spin buttons for input number (Firefox) */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+@responsive {
+  .container {
+    @apply mx-auto px-6 lg:px-8 xl:px-10;
   }
 }

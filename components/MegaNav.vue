@@ -1,5 +1,7 @@
 <template>
-  <div class="w-full bg-primary-lightest shadow-md border-primary-light border-t">
+  <div
+    class="w-full bg-primary-lightest shadow-md border-primary-light border-t"
+  >
     <div class="container">
       <div class="flex flex-wrap items-stretch pt-6 -mx-4">
         <!-- Columns -->
@@ -8,7 +10,11 @@
           :key="'megaNavCol' + index"
           class="flex-initial px-4 mb-6 w-1/4 min-w-48"
         >
-          <li v-for="(item, i) in column.items" :key="'megaNavItem' + i" class="mb-0">
+          <li
+            v-for="(item, i) in column.items"
+            :key="'megaNavItem' + i"
+            class="mb-0"
+          >
             <!-- Product preview -->
             <NuxtLink
               v-if="item.type === 'product' && typeof item.value === 'object'"
@@ -25,7 +31,7 @@
               <div class="pt-4">
                 <h4>{{ item.name }}</h4>
                 <p v-if="item.value.price" class="text-primary-darker">
-                  ${{ item.value.price.toFixed(2) }}
+                  {{ formatMoney(item.value.price, currency) }}
                 </p>
               </div>
             </NuxtLink>
@@ -38,10 +44,24 @@
               {{ item.name }}
             </p>
             <!-- Callout -->
-            <p v-else-if="item.type === 'callout'" :class="{ 'mt-4': i > 0 }" class="btn">
+            <p
+              v-else-if="item.type === 'callout'"
+              :class="{ 'mt-4': i > 0 }"
+              class="btn"
+            >
               {{ item.name }}
             </p>
-            <!-- Standard link -->
+            <!-- URL link -->
+            <a
+              v-else-if="item.type === 'url'"
+              rel="noreferrer noopener"
+              :href="item.value"
+              :target="item.options.target === 'blank' ? '_blank' : '_self'"
+              class="block -mx-1 p-1 leading-tight"
+            >
+              {{ item.name }}
+            </a>
+            <!-- Standard internal link -->
             <NuxtLink
               v-else
               :to="localePath(resolveUrl(item))"
@@ -58,6 +78,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'MegaNav',
 
@@ -66,6 +88,9 @@ export default {
       type: Array,
       default: () => [],
     },
+  },
+  computed: {
+    ...mapState(['currency']),
   },
 }
 </script>

@@ -37,7 +37,9 @@
               v-if="product"
               type="button"
               class="w-8 h-8 rounded-full bg-primary-light ml-auto p-1"
-              @click="$store.commit('setState', { key: 'notification', value: null })"
+              @click="
+                $store.commit('setState', { key: 'notification', value: null })
+              "
             >
               <BaseIcon icon="uil:times" />
             </button>
@@ -69,7 +71,11 @@
               <!-- Name + options -->
               <div class="pt-1">
                 <NuxtLink
-                  :to="localePath(resolveUrl({ type: 'product', value: product.slug }))"
+                  :to="
+                    localePath(
+                      resolveUrl({ type: 'product', value: product.slug })
+                    )
+                  "
                   class="inline-block"
                 >
                   <h4>{{ product.name }}</h4>
@@ -81,8 +87,10 @@
                 <!-- Price/quantity + item editor toggle -->
                 <div class="label-sm-bold leading-none">
                   <div class="inline-block py-1 -mb-1">
-                    <span>{{ formatMoney(product.price, currency) }}</span>
-                    <span v-if="product.quantity > 1">&times; {{ product.quantity }}</span>
+                    <span>{{ formattedPrice }}</span>
+                    <span v-if="product.quantity > 1"
+                      >&times; {{ product.quantity }}</span
+                    >
                   </div>
                 </div>
               </div>
@@ -94,6 +102,7 @@
                 fit="full"
                 :link="cart.checkoutUrl"
                 appearance="dark"
+                target="_self"
                 :label="$t('notifications.checkout')"
               />
 
@@ -126,7 +135,9 @@
                     -translate-y-1
                   "
                 >
-                  <span class="block mt-px text-2xs leading-none">{{ cart.itemQuantity }}</span>
+                  <span class="block mt-px text-2xs leading-none">{{
+                    cart.itemQuantity
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -168,14 +179,35 @@ export default {
     // Fetch item that has been recently added to the cart
     if (this.addedItem) {
       const baseProduct = await $swell.products.get(this.addedItem.productId)
-      const product = await $swell.products.variation(baseProduct, this.addedItem.options)
+      const { purchaseOption } = this.addedItem
+      let product
+
+      if (
+        purchaseOption &&
+        purchaseOption.type === 'subscription' &&
+        purchaseOption.plan
+      ) {
+        product = await $swell.products.variation(
+          baseProduct,
+          this.addedItem.options,
+          {
+            type: 'subscription',
+            plan: purchaseOption.plan,
+          }
+        )
+      } else {
+        product = await $swell.products.variation(
+          baseProduct,
+          this.addedItem.options
+        )
+      }
 
       this.product = product
     }
 
     // Set component data
-    this.header = $swell.settings.get('header', {})
-    this.logoSrc = $swell.settings.get('header.logo.file.url')
+    this.header = await $swell.settings.get('header')
+    this.logoSrc = await $swell.settings.get('header.logo.file.url')
   },
 
   computed: {
@@ -196,6 +228,34 @@ export default {
       return options.join(', ')
     },
 
+    formattedPrice() {
+      const { product, addedItem } = this
+      if (!product) return ''
+
+      const { purchaseOption } = addedItem
+
+      if (purchaseOption.type === 'subscription') {
+        // Get selected subscription billing schedule
+        const plan = product.purchaseOptions.subscription.plans.find((plan) => {
+          return plan.id === purchaseOption.plan
+        })
+
+        if (!plan) return ''
+
+        const { interval, intervalCount } = plan.billingSchedule
+
+        const subscriptionInterval = this.$t(
+          `products.slug.purchaseOptions.interval.${interval}.short`
+        )
+
+        return `${this.formatMoney(product.price, this.currency)}/${
+          intervalCount > 1 ? intervalCount : ''
+        }${subscriptionInterval}`
+      }
+
+      return this.formatMoney(product.price, this.currency)
+    },
+
     headerHeightOffset() {
       // Set initial height before scroll initiates
       if (this.scrollY === null) {
@@ -209,6 +269,13 @@ export default {
         return this.headerHeight - (this.headerHeight - this.scrollY)
       }
       return this.headerHeight
+    },
+  },
+
+  watch: {
+    // If no added item in notification, hide recently added product
+    addedItem(item) {
+      if (!item) this.product = null
     },
   },
 

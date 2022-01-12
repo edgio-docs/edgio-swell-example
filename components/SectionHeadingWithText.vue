@@ -28,10 +28,13 @@
       <div
         v-if="text"
         :class="{
-          'mx-auto md:w-2/3': textColumnWidth === 'compact' && textColumns === 'single',
-          'sw-multi-column': headingPosition.includes('top') && textColumns === 'dual',
+          'mx-auto md:w-2/3':
+            textColumnWidth === 'compact' && textColumns === 'single',
+          'sw-multi-column':
+            headingPosition.includes('top') && textColumns === 'dual',
           'mt-8 lg:mt-10 xl:mt-12': headingPosition.includes('top'),
-          'mt-1 md:w-2/3 md:pl-12 lg:pl-16 xl:pl-20': headingPosition === 'left',
+          'mt-1 md:w-2/3 md:pl-12 lg:pl-16 xl:pl-20':
+            headingPosition === 'left',
         }"
         class="lg:text-lg"
         v-html="text"

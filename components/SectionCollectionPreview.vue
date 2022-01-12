@@ -9,8 +9,14 @@
   <section v-else class="py-16">
     <div class="container">
       <template v-if="showTitle">
-        <div v-if="!loaded && $fetchState.pending" class="loader-el w-64 h-8 mb-2 md:h-10" />
-        <NuxtLink v-else :to="localePath(resolveUrl({ type: 'category', value: slug }))">
+        <div
+          v-if="!loaded && $fetchState.pending"
+          class="loader-el w-64 h-8 mb-2 md:h-10"
+        />
+        <NuxtLink
+          v-else
+          :to="localePath(resolveUrl({ type: 'category', value: slug }))"
+        >
           <component
             :is="titleSize === 'lg' ? 'h1' : titleSize === 'md' ? 'h2' : 'h3'"
             :class="{ 'text-center': titleAlign === 'center' }"
@@ -100,7 +106,9 @@ export default {
 
     // Set preload data
     if (!this.loaded) {
-      this.products = [...Array(this.productCols * this.productRows).keys()].map(() => ({}))
+      this.products = [
+        ...Array(this.productCols * this.productRows).keys(),
+      ].map(() => ({}))
     }
 
     if (!this.categoryId) {
@@ -121,7 +129,10 @@ export default {
     // Set component data
     this.name = this.title || category.name
     this.slug = category.slug
-    this.products = get(products, 'results', []).slice(0, this.productCols * this.productRows)
+    this.products = get(products, 'results', []).slice(
+      0,
+      this.productCols * this.productRows
+    )
 
     this.loaded = true
   },

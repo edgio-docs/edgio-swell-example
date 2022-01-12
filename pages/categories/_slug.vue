@@ -25,7 +25,7 @@
         :style="{
           opacity: category.images ? settings.darkenHeroImage / 100 : 1,
         }"
-        class="absolute w-full h-full inset-0 bg-primary-darkest"
+        class="absolute inset-0 w-full h-full bg-primary-darkest"
       />
       <div v-if="category" class="container absolute text-center center-xy">
         <h1
@@ -47,10 +47,13 @@
       </div>
     </section>
 
-    <div class="container pt-7 pb-4">
+    <div class="container pb-4 pt-7">
       <!-- Category name & description -->
       <template v-if="!settings.showHeroImage">
-        <div v-if="!category && $fetchState.pending" class="loader-el w-64 h-10 mt-2 mb-9" />
+        <div
+          v-if="!category && $fetchState.pending"
+          class="w-64 h-10 mt-2 loader-el mb-9"
+        />
         <div v-else-if="settings.headingPosition !== 'hero_image'" class="mb-7">
           <h1>{{ category.name }}</h1>
           <div class="text-lg" v-html="category.description" />
@@ -67,18 +70,11 @@
         >
           <div
             v-show="activeFilterCount"
-            class="
-              w-6
-              h-6
-              flex
-              justify-center
-              items-center
-              text-primary-lighter
-              bg-accent-default
-              rounded-full
-            "
+            class="flex items-center justify-center w-6 h-6 rounded-full  text-primary-lighter bg-accent-default"
           >
-            <span class="block text-2xs leading-none">{{ activeFilterCount }}</span>
+            <span class="block leading-none text-2xs">{{
+              activeFilterCount
+            }}</span>
           </div>
           <div v-show="!activeFilterCount">
             <BaseIcon icon="uil:filter" />
@@ -112,7 +108,10 @@
         :products="products"
         :column-count="settings.productCols"
       />
-      <div v-else-if="activeFilterCount > 0" class="py-16 bg-primary-lighter text-center rounded">
+      <div
+        v-else-if="activeFilterCount > 0"
+        class="py-16 text-center rounded bg-primary-lighter"
+      >
         <p>{{ $t('categories.slug.filterProductsNotFound') }}</p>
         <BaseButton
           class="mt-4"
@@ -122,13 +121,17 @@
           @click.native="toggleFilterModal"
         />
       </div>
-      <div v-else class="py-16 bg-primary-lighter text-center rounded">
+      <div v-else class="py-16 text-center rounded bg-primary-lighter">
         <p>{{ $t('categories.slug.categoryProductsNotFound') }}</p>
       </div>
 
       <!-- Category pagination controls -->
       <div v-if="pages" class="py-2 sm:py-4 md:py-6">
-        <PaginationButtons :current-page="page" :pages="pages" />
+        <PaginationButtons
+          :current-page="page"
+          :pages="pages"
+          :appearance="paginationStyle"
+        />
       </div>
     </div>
   </main>
@@ -143,7 +146,10 @@ import { getFilterStateFromQuery } from '~/modules/swell'
 
 // Calculate product limit from category rows/cols
 function getProductLimit(category) {
-  return ~~get(category, 'content.productRows', 4) * ~~get(category, 'content.productCols', 6)
+  return (
+    ~~get(category, 'content.productRows', 4) *
+    ~~get(category, 'content.productCols', 6)
+  )
 }
 
 export default {
@@ -163,6 +169,7 @@ export default {
       limit: 24,
       sortMode: '',
       filterModalIsVisible: false,
+      paginationStyle: 'prevNext',
     }
   },
 
@@ -205,6 +212,7 @@ export default {
     }
 
     this.setProducts(products)
+    this.paginationStyle = get(category, 'content.paginationStyle')
   },
 
   computed: {
@@ -287,7 +295,10 @@ export default {
       const query = { ...currentQuery, ...newQuery }
 
       // Remove filters from merged query if not present in new query
-      const currentFilterState = getFilterStateFromQuery(currentQuery, this.filters)
+      const currentFilterState = getFilterStateFromQuery(
+        currentQuery,
+        this.filters
+      )
       const newFilterState = getFilterStateFromQuery(newQuery, this.filters)
 
       Object.keys(currentFilterState).forEach((key) => {

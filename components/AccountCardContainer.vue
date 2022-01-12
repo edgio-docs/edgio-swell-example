@@ -4,14 +4,19 @@
       <div class="w-full flex pb-6">
         <BrandCardIcon :brand="card.brand" />
 
-        <div v-if="isDefault" class="ml-auto label-xs-bold bg-primary-light rounded p-2">
+        <div
+          v-if="isDefault"
+          class="ml-auto label-xs-bold bg-primary-light rounded p-2"
+        >
           {{ $t('account.payments.card.default') }}
         </div>
       </div>
 
       <div class="w-full flex pb-4">
         <p v-if="card.brand === 'American Express'">
-          <span class="tracking-large">···· ···· ···{{ card.last4.slice(0, 1) }} </span>
+          <span class="tracking-large"
+            >···· ···· ···{{ card.last4.slice(0, 1) }}
+          </span>
           {{ card.last4.slice(1, card.last4.length) }}
         </p>
         <p v-else>
@@ -36,7 +41,9 @@
               {{ card.billing.name }}
             </p>
             <p v-if="card.billing.address1">
-              <template v-if="card.billing.address2"> {{ card.billing.address2 }}, </template>
+              <template v-if="card.billing.address2">
+                {{ card.billing.address2 }},
+              </template>
               {{ card.billing.address1 }}
             </p>
             <p v-if="card.billing.city">
@@ -69,8 +76,6 @@
 </template>
 
 <script>
-import padStart from 'lodash/padStart'
-
 export default {
   props: {
     card: {
@@ -87,14 +92,17 @@ export default {
     formattedCardNumber() {
       const { brand, last4 } = this.card
       if (brand === 'American Express') {
-        return `···· ···· ···${last4.substring(0, 1)} ${last4.substring(1, last4.length)}`
+        return `···· ···· ···${last4.substring(0, 1)} ${last4.substring(
+          1,
+          last4.length
+        )}`
       } else {
         return `···· ···· ···· ${last4}`
       }
     },
 
     expDate() {
-      const mm = padStart(this.card.expMonth, 2, '0')
+      const mm = this.card.expMonth.padStart(2, '0')
       const yy = this.card.expYear.toString().slice(-2)
       return `${mm} / ${yy}`
     },

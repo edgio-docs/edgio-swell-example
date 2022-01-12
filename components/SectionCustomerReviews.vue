@@ -1,9 +1,9 @@
 <template>
   <!-- Error/empty state -->
   <SectionUndefined
-    v-if="!reviews.length"
+    v-if="!heading && !reviews.length"
     heading="Customer reviews"
-    description="No reviews added"
+    description="No heading or reviews added"
   />
 
   <section v-else class="relative container my-14 lg:my-16">
@@ -18,7 +18,10 @@
         class="relative w-full transition-all ease-in-out duration-300"
       >
         <!-- Arrows -->
-        <div v-if="reviews.length > 1" class="absolute inset-0 flex items-center justify-between">
+        <div
+          v-if="reviews.length > 1"
+          class="absolute inset-0 flex items-center justify-between"
+        >
           <button
             title="Previous review"
             class="p-2 rounded-full bg-primary-lighter"
@@ -39,28 +42,47 @@
         <transition
           enter-active-class="transition-all duration-200 ease-out"
           :enter-class="
-            animationDirection === 'left' ? 'opacity-0 translate-x-5' : 'opacity-0 -translate-x-5'
+            animationDirection === 'left'
+              ? 'opacity-0 translate-x-5'
+              : 'opacity-0 -translate-x-5'
           "
           enter-to-class="opacity-100"
           leave-active-class="transition-all duration-200 ease-in"
           leave-class="opacity-100"
           :leave-to-class="
-            animationDirection === 'left' ? 'opacity-0 -translate-x-5' : 'opacity-0 translate-x-5'
+            animationDirection === 'left'
+              ? 'opacity-0 -translate-x-5'
+              : 'opacity-0 translate-x-5'
           "
           mode="out-in"
           @before-enter="setMaxElHeight"
         >
           <div ref="quoteContent" :key="currentReview.id">
             <div
-              class="flex justify-center items-center flex-col text-center px-16 md:px-28 lg:px-48"
+              class="
+                flex
+                justify-center
+                items-center
+                flex-col
+                text-center
+                px-16
+                md:px-28
+                lg:px-48
+              "
             >
-              <ReviewStars v-if="currentReview.score" :score="currentReview.score" class="mb-4" />
+              <ReviewStars
+                v-if="currentReview.score"
+                :score="currentReview.score"
+                class="mb-4"
+              />
               <p class="mx-auto mb-4 max-w-128">
                 {{ currentReview.quote || 'No quote added' }}
               </p>
               <p class="label-sm-faded">
                 <span>{{ currentReview.name }}</span
-                ><span v-if="currentReview.location">, {{ currentReview.location }}</span>
+                ><span v-if="currentReview.location"
+                  >, {{ currentReview.location }}</span
+                >
               </p>
             </div>
           </div>

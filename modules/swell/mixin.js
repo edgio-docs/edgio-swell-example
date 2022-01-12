@@ -20,11 +20,17 @@ Vue.use({
   },
 })
 
-function formatMoney(amount, code) {
-  return this.$nuxt.$store.$swell.currency.format(amount, { code })
+function formatMoney(amount, code, convert = true) {
+  return this.$nuxt.$store.$swell.currency.format(amount, {
+    code,
+    convert,
+  })
 }
 
-function formatDate(date, options = { month: 'long', day: '2-digit', year: 'numeric' }) {
+function formatDate(
+  date,
+  options = { month: 'long', day: '2-digit', year: 'numeric' }
+) {
   const d = new Date(date)
   const locale = this.$nuxt.$store.$swell.locale.selected() || 'default'
 

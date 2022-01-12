@@ -3,12 +3,28 @@ import middleware from './middleware'
 import { editor } from './swell-editor-utils'
 
 export default (context, inject) => {
+  context.i18n = {
+    ...context.i18n,
+    locales: context.i18n.locales.map((localeOptions) => ({
+      ...localeOptions,
+      file: 'index.js',
+    })),
+    langDir: '~/modules/swell-editor/lang',
+    lazy: {
+      skipNuxtState: true,
+    },
+  }
+
   if (process.browser) {
     // Initialize data sync plugin
     Vue.use(SyncPlugin)
 
     // Listen for messages and pass to event bus
-    window.addEventListener('message', (event) => editor.processMessage(event, context), false)
+    window.addEventListener(
+      'message',
+      (event) => editor.processMessage(event, context),
+      false
+    )
 
     // Tell the editor we exist
     editor.sendMessage({
@@ -47,6 +63,8 @@ export default (context, inject) => {
       throw err
     }
   }
+
+  editor.processMessage({ data: { type: 'settings.loaded' } }, context)
 
   // Add editor to Nuxt context as $swellEditor
   inject('swellEditor', editor)

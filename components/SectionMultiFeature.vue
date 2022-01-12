@@ -1,9 +1,9 @@
 <template>
   <!-- Error/empty state -->
   <SectionUndefined
-    v-if="!features.length"
+    v-if="!heading && !features.length"
     heading="Multiple features"
-    description="No features added"
+    description="No heading or features added"
   />
 
   <section v-else class="text-center px-6 py-16 lg:px-8 xl:px-20">
@@ -17,7 +17,10 @@
         :class="{ 'w-48': columnWidth === 'sm' }"
         class="mx-3 my-6 lg:mx-5"
       >
-        <div v-if="feature" class="relative rounded-full bg-primary-light mx-auto w-16 h-16">
+        <div
+          v-if="feature"
+          class="relative rounded-full bg-primary-light mx-auto w-16 h-16"
+        >
           <BaseIcon :icon="feature.icon" size="lg" class="absolute center-xy" />
         </div>
         <p v-if="feature" class="text-lg mt-4">

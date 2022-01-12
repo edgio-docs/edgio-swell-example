@@ -21,9 +21,11 @@
           />
 
           <template v-if="otherAddresses && otherAddresses.length">
-            <span v-if="defaultAddress" class="block md:hidden label-xs-bold-faded">{{
-              $t('account.addresses.otherAddresses')
-            }}</span>
+            <span
+              v-if="defaultAddress"
+              class="block md:hidden label-xs-bold-faded"
+              >{{ $t('account.addresses.otherAddresses') }}</span
+            >
 
             <AccountAddressContainer
               v-for="(address, index) in otherAddresses"
@@ -167,7 +169,9 @@ export default {
     sortedAddresses() {
       const { addresses } = this
       if (!addresses) return
-      return addresses.sort((a, b) => new Date(a.dateCreated) - new Date(b.dateCreated))
+      return addresses.sort(
+        (a, b) => new Date(a.dateCreated) - new Date(b.dateCreated)
+      )
     },
   },
 
@@ -192,8 +196,17 @@ export default {
       try {
         this.isCreating = true
 
-        const { firstName, lastName, address1, address2, city, state, zip, country, isDefault } =
-          address
+        const {
+          firstName,
+          lastName,
+          address1,
+          address2,
+          city,
+          state,
+          zip,
+          country,
+          isDefault,
+        } = address
 
         const accountAddress = await this.$swell.account.createAddress({
           name: `${firstName.trim()} ${lastName.trim()}`,
@@ -236,8 +249,17 @@ export default {
       try {
         this.isUpdating = true
 
-        const { firstName, lastName, address1, address2, city, state, zip, country, isDefault } =
-          address
+        const {
+          firstName,
+          lastName,
+          address1,
+          address2,
+          city,
+          state,
+          zip,
+          country,
+          isDefault,
+        } = address
 
         await this.$swell.account.updateAddress(this.addressToEdit.id, {
           name: `${firstName.trim()} ${lastName.trim()}`,

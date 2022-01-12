@@ -1,5 +1,8 @@
 <template>
-  <div class="relative container pt-6 pb-24 md:max-w-112 md:pt-24" @keyup.enter="changePassword">
+  <div
+    class="relative container pt-6 pb-24 md:max-w-112 md:pt-24"
+    @keyup.enter="changePassword"
+  >
     <h2 class="pb-6">{{ $t('account.resetPassword.title') }}</h2>
 
     <p class="text-sm mb-10">{{ $t('account.resetPassword.infoText') }}</p>
@@ -17,13 +20,17 @@
       />
 
       <template v-if="$v.password.$dirty">
-        <span v-if="!$v.password.minLength" class="label-sm text-error-default">{{
-          $t('account.resetPassword.password.minLength', { n: 6 })
-        }}</span>
+        <span
+          v-if="!$v.password.minLength"
+          class="label-sm text-error-default"
+          >{{ $t('account.resetPassword.password.minLength', { n: 6 }) }}</span
+        >
 
-        <span v-if="!$v.password.required" class="label-sm text-error-default">{{
-          $t('account.resetPassword.password.required')
-        }}</span>
+        <span
+          v-if="!$v.password.required"
+          class="label-sm text-error-default"
+          >{{ $t('account.resetPassword.password.required') }}</span
+        >
       </template>
     </div>
 
@@ -36,9 +43,11 @@
       />
 
       <template v-if="$v.confirmPassword.$dirty">
-        <span v-if="!$v.confirmPassword.sameAsPassword" class="label-sm text-error-default">{{
-          $t('account.resetPassword.confirmPassword.notMatch')
-        }}</span>
+        <span
+          v-if="!$v.confirmPassword.sameAsPassword"
+          class="label-sm text-error-default"
+          >{{ $t('account.resetPassword.confirmPassword.notMatch') }}</span
+        >
       </template>
     </div>
 

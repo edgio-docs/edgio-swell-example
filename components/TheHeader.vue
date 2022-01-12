@@ -2,33 +2,61 @@
   <div ref="header" data-sw-path="header">
     <!-- Duplicate elements to match header height and push main content down -->
     <div class="opacity-0">
-      <ThePromoBar v-if="header.showPromo" text="|" :hidden="header.hideOnScroll && hideHeader" />
+      <ThePromoBar
+        v-if="header.showPromo"
+        text="|"
+        :hidden="header.hideOnScroll && hideHeader"
+      />
       <div class="py-3">
-        <span v-if="logoSrc" :style="{ height: header.logoHeight + 'px' }" class="block" />
+        <span
+          v-if="logoSrc"
+          :style="{ height: header.logoHeight + 'px' }"
+          class="block"
+        />
         <span v-else class="text-3xl sm:text-4xl">|</span>
       </div>
     </div>
 
     <!-- Full screen nav for small screens -->
-    <TheMobileNav v-if="mobileNavIsVisible" :menu-items="menu.items" v-on="$listeners" />
+    <TheMobileNav
+      v-if="mobileNavIsVisible"
+      :menu-items="menu.items"
+      v-on="$listeners"
+    />
 
     <!-- Main header -->
-    <div class="z-40 fixed top-0 w-full">
+    <div class="fixed top-0 z-40 w-full">
       <div
-        class="w-full fixed transform translate-y-0 transition-all ease-in-out duration-200"
+        class="
+          fixed
+          w-full
+          transition-all
+          duration-200
+          ease-in-out
+          transform
+          translate-y-0
+        "
         :class="[
           'bg-primary-lightest',
           { 'transform -translate-y-full': header.hideOnScroll && hideHeader },
         ]"
       >
-        <header class="z-40 shadow-md transition-all duration-300 ease-in-out">
+        <header
+          class="z-40 transition-all duration-300 ease-in-out"
+          :class="{
+            'shadow-md': !mobileNavIsVisible,
+            'border-b border-primary-light': mobileNavIsVisible,
+          }"
+        >
           <ThePromoBar
             v-if="header.showPromo"
             :url="header.promoUrl"
             :text="header.promoText || '[ Promotional text ]'"
             :hidden="header.hideOnScroll && hideHeader"
           />
-          <div class="relative container flex justify-between items-stretch z-20">
+          <div
+            class="container relative z-20 flex items-stretch justify-between"
+          >
             <!-- Logo -->
             <div class="py-3 lg:w-1/4">
               <NuxtLink :to="localePath(resolveUrl({ type: 'home' }))">
@@ -38,32 +66,56 @@
                   :height="header.logoHeight"
                   :style="{ height: header.logoHeight + 'px' }"
                   class="inline-block w-auto"
+                  :alt="storeName"
                 />
-                <span v-else class="text-3xl sm:text-4xl whitespace-no-wrap">{{ storeName }}</span>
+                <span v-else class="text-3xl whitespace-no-wrap sm:text-4xl">{{
+                  storeName
+                }}</span>
               </NuxtLink>
             </div>
 
             <!-- Main nav menu -->
-            <nav v-if="menu" class="w-full lg:w-auto hidden lg:flex">
+            <nav v-if="menu" class="hidden w-full lg:w-auto lg:flex">
               <ul class="flex justify-center">
                 <li
                   v-for="(item, index) in menu.items"
                   :key="item.name"
-                  class="sw-nav-link-wrapper mb-0"
+                  class="mb-0 sw-nav-link-wrapper"
                 >
-                  <NuxtLink
-                    :to="localePath(resolveUrl(item))"
-                    :title="item.description"
+                  <a
+                    v-if="item.type === 'url'"
                     class="
-                      sw-nav-link
                       relative
                       flex
                       items-center
                       h-full
                       px-5
                       pt-1
+                      border-b-4 border-transparent
                       rounded-none
-                      border-transparent border-b-4
+                      sw-nav-link
+                    "
+                    rel="noreferrer noopener"
+                    :href="item.value"
+                    :target="
+                      item.options.target === 'blank' ? '_blank' : '_self'
+                    "
+                    >{{ item.name }}</a
+                  >
+                  <NuxtLink
+                    v-else
+                    :to="localePath(resolveUrl(item))"
+                    :title="item.description"
+                    class="
+                      relative
+                      flex
+                      items-center
+                      h-full
+                      px-5
+                      pt-1
+                      border-b-4 border-transparent
+                      rounded-none
+                      sw-nav-link
                     "
                     @click.native="megaNavIsEnabled = false"
                     @mouseleave.native="hideMegaNav"
@@ -101,26 +153,36 @@
               <!-- Currency select -->
               <CurrencySelect
                 v-if="currencyList.length > 1"
-                :currency="currency"
+                :current-currency="currency"
                 class="hidden lg:block"
                 appearance="float"
               />
               <!-- Search icon -->
-              <button class="h-10 p-2" @click.prevent="$emit('click-search')">
+              <button
+                :aria-label="$t('navigation.search')"
+                class="h-10 p-2 text-inherit"
+                @click.prevent="$emit('click-search')"
+              >
                 <BaseIcon icon="uil:search" />
               </button>
               <!-- Account icon -->
               <NuxtLink
                 class="hidden h-10 p-2 lg:inline-block"
-                :to="localePath(customerLoggedIn ? '/account/orders/' : '/account/login/')"
+                :aria-label="$t('navigation.account')"
+                :to="
+                  localePath(
+                    customerLoggedIn ? '/account/orders/' : '/account/login/'
+                  )
+                "
               >
                 <BaseIcon icon="uil:user" />
               </NuxtLink>
               <!-- Cart icon -->
               <button
-                class="relative h-10 p-2"
+                class="relative h-10 p-2 text-inherit"
                 data-sw-path="cart"
                 data-sw-click="true"
+                :aria-label="$t('cart.title')"
                 @click.prevent="
                   $store.commit('setState', {
                     key: 'cartIsActive',
@@ -132,41 +194,44 @@
                 <div
                   v-if="cart && cart.itemQuantity"
                   class="
-                    fade-in
                     absolute
-                    left-5
                     top-0
-                    bg-accent-default
-                    rounded-full
+                    flex
+                    items-center
+                    justify-center
                     w-6
                     h-6
-                    flex
-                    justify-center
-                    items-center
+                    rounded-full
+                    fade-in
+                    left-5
+                    bg-accent-default
                     text-primary-lighter
                   "
                 >
-                  <span class="block mt-px text-2xs leading-none">{{ cart.itemQuantity }}</span>
+                  <span class="block mt-px leading-none text-2xs">{{
+                    cart.itemQuantity
+                  }}</span>
                 </div>
               </button>
               <!-- Mobile nav toggle -->
               <button
                 :class="{ 'is-active': mobileNavIsVisible }"
                 class="
-                  hamburger hamburger--squeeze
-                  outline-none
                   relative
                   w-10
                   h-10
                   p-1
                   ml-2
                   rounded
+                  outline-none
+                  hamburger hamburger--squeeze
                   lg:hidden
                 "
                 type="button"
+                :aria-label="$t('navigation.menu')"
                 @click="setMobileNavVisibility"
               >
-                <span class="absolute center-xy w-6 h-6">
+                <span class="absolute w-6 h-6 center-xy">
                   <span class="hamburger-inner"></span>
                 </span>
               </button>
@@ -205,18 +270,18 @@ export default {
     }
   },
 
-  fetch() {
+  async fetch() {
     const { $swell } = this
 
     // Get menu ID
-    const menuId = $swell.settings.get('header.menu', 'header')
+    const menuId = await $swell.settings.get('header.menu', 'header')
 
     // Set component data
-    this.header = $swell.settings.get('header', {})
-    this.menu = $swell.settings.menus(menuId)
-    this.storeName = $swell.settings.get('store.name', 'ORIGIN')
-    this.logoSrc = $swell.settings.get('header.logo.file.url')
-    this.currencyList = $swell.currency.list()
+    this.header = await $swell.settings.get('header')
+    this.menu = await $swell.settings.menus(menuId)
+    this.storeName = await $swell.settings.get('store.name', 'ORIGIN')
+    this.logoSrc = await $swell.settings.get('header.logo.file.url')
+    this.currencyList = await $swell.currency.list()
   },
 
   computed: {
@@ -228,6 +293,9 @@ export default {
       // Close mega/mobile nav menu when the page changes
       this.hideHeader = false
       this.setMobileNavVisibility(false)
+    },
+    locale() {
+      this.$fetch()
     },
   },
 
@@ -279,7 +347,8 @@ export default {
       if (!this.mounted) return true
 
       // Show MegaNav, depending on which nav link is selected
-      if (this.megaNavIsEnabled && this.currentMegaNavIndex === index) return true
+      if (this.megaNavIsEnabled && this.currentMegaNavIndex === index)
+        return true
     },
 
     showMegaNav(index) {
@@ -296,7 +365,8 @@ export default {
     setHeaderVisibility() {
       this.isScrolled = false
       // Check how far page has scrolled
-      const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop
+      const currentScrollPosition =
+        window.pageYOffset || document.documentElement.scrollTop
       if (currentScrollPosition < 0) return
 
       // Stop executing this function if the difference between
@@ -310,10 +380,7 @@ export default {
           return
         }
         this.hideHeader = true
-        this.$store.commit('setState', {
-          key: 'headerIsVisible',
-          value: false,
-        })
+        this.$store.commit('setState', { key: 'headerIsVisible', value: false })
       } else {
         // Stop executing if hide header is already false
         if (!this.hideHeader) {
@@ -340,7 +407,8 @@ export default {
       if (value) {
         process.client && window.addEventListener('scroll', this.handleScroll)
       } else {
-        process.client && window.removeEventListener('scroll', this.handleScroll)
+        process.client &&
+          window.removeEventListener('scroll', this.handleScroll)
         this.hideHeader = false
       }
     },
@@ -397,7 +465,8 @@ export default {
   transition: top 0.075s 0.12s ease, opacity 0.075s ease;
 }
 .hamburger--squeeze .hamburger-inner::after {
-  transition: bottom 0.075s 0.12s ease, transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  transition: bottom 0.075s 0.12s ease,
+    transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
 .hamburger--squeeze.is-active .hamburger-inner {
@@ -413,6 +482,7 @@ export default {
 .hamburger--squeeze.is-active .hamburger-inner::after {
   bottom: 0;
   transform: rotate(-90deg);
-  transition: bottom 0.075s ease, transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: bottom 0.075s ease,
+    transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 </style>

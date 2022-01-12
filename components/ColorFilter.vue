@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div v-for="(color, i) in colors" :key="`color-${i}`" class="color-selector">
+    <div
+      v-for="(color, i) in colors"
+      :key="`color-${i}`"
+      class="color-selector"
+    >
       <input
         :id="`color-${i}`"
         v-model="selectedColors"
@@ -15,7 +19,10 @@
           class="indicator transition-all duration-200 ease-in-out"
           :style="{ borderColor: color.hex }"
         />
-        <span :style="{ backgroundColor: color.hex }" class="w-8 h-8 block rounded" />
+        <span
+          :style="{ backgroundColor: color.hex }"
+          class="w-8 h-8 block rounded"
+        />
       </label>
     </div>
   </div>
@@ -46,7 +53,9 @@ export default {
     val() {
       const value = []
       for (let i = 0; i < this.selectedColors.length; i++) {
-        const matchedColor = this.colors.filter((color) => color.name === this.selectedColors[i])
+        const matchedColor = this.colors.filter(
+          (color) => color.name === this.selectedColors[i]
+        )
         if (matchedColor.length) value.push(matchedColor[0])
       }
       return value

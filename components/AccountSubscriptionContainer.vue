@@ -24,8 +24,18 @@
               "
             >
               <div class="overlay" />
-              <span class="absolute center-xy text-lg font-semibold text-primary-lightest">
-                +{{ subscription.product.bundleItems.length - thumbnails.length }}
+              <span
+                class="
+                  absolute
+                  center-xy
+                  text-lg
+                  font-semibold
+                  text-primary-lightest
+                "
+              >
+                +{{
+                  subscription.product.bundleItems.length - thumbnails.length
+                }}
               </span>
             </div>
           </template>
@@ -43,7 +53,9 @@
 
         <p class="label-sm-bold mb-4">
           <span class="pr-2"
-            >{{ formatMoney(subscription.recurringTotal, subscription.currency) }}
+            >{{
+              formatMoney(subscription.recurringTotal, subscription.currency)
+            }}
             {{ subscription.interval }}</span
           >
         </p>

@@ -45,13 +45,19 @@
                 autocomplete="given-name"
               />
               <template v-if="$v.firstName.$dirty">
-                <span v-if="!$v.firstName.required" class="label-sm text-error-default">{{
-                  $t('account.addresses.popup.firstName.required')
-                }}</span>
+                <span
+                  v-if="!$v.firstName.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.addresses.popup.firstName.required') }}</span
+                >
 
-                <span v-if="!$v.firstName.maxLength" class="label-sm text-error-default">{{
-                  $t('account.addresses.popup.firstName.maxLength', { n: 40 })
-                }}</span>
+                <span
+                  v-if="!$v.firstName.maxLength"
+                  class="label-sm text-error-default"
+                  >{{
+                    $t('account.addresses.popup.firstName.maxLength', { n: 40 })
+                  }}</span
+                >
               </template>
             </div>
 
@@ -64,13 +70,19 @@
                 autocmplete="family-name"
               />
               <template v-if="$v.lastName.$dirty">
-                <span v-if="!$v.lastName.required" class="label-sm text-error-default">{{
-                  $t('account.addresses.popup.lastName.required')
-                }}</span>
+                <span
+                  v-if="!$v.lastName.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.addresses.popup.lastName.required') }}</span
+                >
 
-                <span v-if="!$v.lastName.maxLength" class="label-sm text-error-default">{{
-                  $t('account.addresses.popup.lastName.maxLength', { n: 40 })
-                }}</span>
+                <span
+                  v-if="!$v.lastName.maxLength"
+                  class="label-sm text-error-default"
+                  >{{
+                    $t('account.addresses.popup.lastName.maxLength', { n: 40 })
+                  }}</span
+                >
               </template>
             </div>
 
@@ -83,9 +95,11 @@
                 autocomplete="address-line1"
               />
               <template v-if="$v.address1.$dirty">
-                <span v-if="!$v.address1.required" class="label-sm text-error-default">{{
-                  $t('account.addresses.popup.address1.required')
-                }}</span>
+                <span
+                  v-if="!$v.address1.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.addresses.popup.address1.required') }}</span
+                >
               </template>
             </div>
 
@@ -106,17 +120,21 @@
                 autocomplete="address-level2"
               />
               <template v-if="$v.city.$dirty">
-                <span v-if="!$v.city.required" class="label-sm text-error-default">{{
-                  $t('account.addresses.popup.city.required')
-                }}</span>
+                <span
+                  v-if="!$v.city.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.addresses.popup.city.required') }}</span
+                >
               </template>
             </div>
 
             <div class="flex flex-no-wrap mb-6">
               <div class="w-1/2 mr-3">
-                <label class="label-xs-bold-faded block mb-2" for="region-select">{{
-                  $t('account.addresses.popup.region.label')
-                }}</label>
+                <label
+                  class="label-xs-bold-faded block mb-2"
+                  for="region-select"
+                  >{{ $t('account.addresses.popup.region.label') }}</label
+                >
 
                 <div class="relative mb-2">
                   <region-select
@@ -140,14 +158,19 @@
                   />
 
                   <div>
-                    <BaseIcon icon="uil:angle-down" class="absolute mr-2 right-0 center-y" />
+                    <BaseIcon
+                      icon="uil:angle-down"
+                      class="absolute mr-2 right-0 center-y"
+                    />
                   </div>
                 </div>
 
                 <template v-if="$v.state.$dirty">
-                  <span v-if="!$v.state.required" class="label-sm text-error-default">{{
-                    $t('account.addresses.popup.region.required')
-                  }}</span>
+                  <span
+                    v-if="!$v.state.required"
+                    class="label-sm text-error-default"
+                    >{{ $t('account.addresses.popup.region.required') }}</span
+                  >
                 </template>
               </div>
 
@@ -161,17 +184,21 @@
                 />
 
                 <template v-if="$v.zip.$dirty">
-                  <span v-if="!$v.zip.required" class="label-sm text-error-default">{{
-                    $t('account.addresses.popup.zipCode.required')
-                  }}</span>
+                  <span
+                    v-if="!$v.zip.required"
+                    class="label-sm text-error-default"
+                    >{{ $t('account.addresses.popup.zipCode.required') }}</span
+                  >
                 </template>
               </div>
             </div>
 
             <div class="mb-6">
-              <label class="label-xs-bold-faded block mb-2" for="country-select">{{
-                $t('account.addresses.popup.country.label')
-              }}</label>
+              <label
+                class="label-xs-bold-faded block mb-2"
+                for="country-select"
+                >{{ $t('account.addresses.popup.country.label') }}</label
+              >
 
               <div class="relative mb-2">
                 <country-select
@@ -191,13 +218,18 @@
                   :autocomplete="true"
                 />
 
-                <BaseIcon icon="uil:angle-down" class="absolute mr-2 right-0 center-y" />
+                <BaseIcon
+                  icon="uil:angle-down"
+                  class="absolute mr-2 right-0 center-y"
+                />
               </div>
 
               <template v-if="$v.state.$dirty">
-                <span v-if="!$v.country.required" class="label-sm text-error-default">{{
-                  $t('account.addresses.popup.country.required')
-                }}</span>
+                <span
+                  v-if="!$v.country.required"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.addresses.popup.country.required') }}</span
+                >
               </template>
             </div>
 
@@ -210,9 +242,11 @@
                 autocomplete="tel"
               />
               <template v-if="$v.phone.$dirty">
-                <span v-if="!$v.phone.validPhone" class="label-sm text-error-default">{{
-                  $t('account.addresses.popup.phone.format')
-                }}</span>
+                <span
+                  v-if="!$v.phone.validPhone"
+                  class="label-sm text-error-default"
+                  >{{ $t('account.addresses.popup.phone.format') }}</span
+                >
               </template>
             </div>
 
@@ -233,7 +267,9 @@
             </div>
 
             <!-- Duplicate button elements to match fixed content below -->
-            <div class="block md:hidden grid gap-y-4 invisible pointer-events-none">
+            <div
+              class="block md:hidden grid gap-y-4 invisible pointer-events-none"
+            >
               <div v-if="type === 'new'" class="btn">|</div>
               <div v-if="type === 'update'" class="btn">|</div>
               <div v-if="type === 'update' && deletable" class="btn">|</div>
@@ -260,7 +296,9 @@
             v-if="type === 'new'"
             appearance="dark"
             :label="$t('account.addresses.popup.create.button.label')"
-            :loading-label="$t('account.addresses.popup.create.button.loadingLabel')"
+            :loading-label="
+              $t('account.addresses.popup.create.button.loadingLabel')
+            "
             :is-loading="isCreating"
             :disabled="isUpdating || isDeleting"
             @click.native="create()"
@@ -270,7 +308,9 @@
             v-if="type === 'update'"
             appearance="dark"
             :label="$t('account.addresses.popup.save.button.label')"
-            :loading-label="$t('account.addresses.popup.save.button.loadingLabel')"
+            :loading-label="
+              $t('account.addresses.popup.save.button.loadingLabel')
+            "
             :is-loading="isUpdating"
             :disabled="isCreating || isDeleting"
             @click.native="update()"
@@ -280,7 +320,9 @@
             v-if="type === 'update' && deletable"
             appearance="light-error"
             :label="$t('account.addresses.popup.delete.button.label')"
-            :loading-label="$t('account.addresses.popup.delete.button.loadingLabel')"
+            :loading-label="
+              $t('account.addresses.popup.delete.button.loadingLabel')
+            "
             :is-loading="isDeleting"
             :disabled="isCreating || isUpdating"
             @click.native="remove()"
@@ -303,6 +345,17 @@ const validPhone = helpers.regex(
 )
 
 export default {
+  components: {
+    async CountrySelect() {
+      const { CountrySelect } = await import('vue-country-region-select')
+      return CountrySelect
+    },
+    async RegionSelect() {
+      const { RegionSelect } = await import('vue-country-region-select')
+      return RegionSelect
+    },
+  },
+
   mixins: [validationMixin],
 
   props: {
@@ -369,13 +422,27 @@ export default {
       if (!this.defaultAddressId && !this.addressesLength) return true
       // Disable if current address is the only one and default
       if (this.address) {
-        if (this.defaultAddressId === this.address.id && this.addressesLength === 1) return true
+        if (
+          this.defaultAddressId === this.address.id &&
+          this.addressesLength === 1
+        )
+          return true
       }
       return false
     },
 
     addressBody() {
-      const { firstName, lastName, address1, address2, city, state, zip, country, phone } = this
+      const {
+        firstName,
+        lastName,
+        address1,
+        address2,
+        city,
+        state,
+        zip,
+        country,
+        phone,
+      } = this
       return {
         firstName,
         lastName,
@@ -410,7 +477,11 @@ export default {
     }
 
     // If there's no default card, force set default
-    if (!this.defaultAddressId && !this.addressesLength && this.type === 'new') {
+    if (
+      !this.defaultAddressId &&
+      !this.addressesLength &&
+      this.type === 'new'
+    ) {
       this.setDefault = true
     }
   },

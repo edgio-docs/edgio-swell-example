@@ -92,10 +92,13 @@ export default {
           })
         case 'paused':
           return this.datePauseEnd
-            ? this.$t('account.subscriptions.subscription.status.pausedResumes', {
-                date: this.formatDate(this.datePauseEnd),
-                time: this.formatTime(this.datePauseEnd),
-              })
+            ? this.$t(
+                'account.subscriptions.subscription.status.pausedResumes',
+                {
+                  date: this.formatDate(this.datePauseEnd),
+                  time: this.formatTime(this.datePauseEnd),
+                }
+              )
             : this.$t('account.subscriptions.subscription.status.paused', {
                 date: this.formatDate(this.datePaused),
               })
@@ -116,15 +119,23 @@ export default {
     statusMessage() {
       switch (this.status) {
         case 'active':
-          return this.$t('account.subscriptions.subscription.status.activeMessage')
+          return this.$t(
+            'account.subscriptions.subscription.status.activeMessage'
+          )
         case 'paused':
           return this.datePauseEnd
-            ? this.$t('account.subscriptions.subscription.status.pausedResumesMessage')
+            ? this.$t(
+                'account.subscriptions.subscription.status.pausedResumesMessage'
+              )
             : this.$t('account.subscriptions.subscription.status.pausedMessage')
         case 'canceled':
-          return this.$t('account.subscriptions.subscription.status.canceledMessage')
+          return this.$t(
+            'account.subscriptions.subscription.status.canceledMessage'
+          )
         case 'trial':
-          return `${this.$t('account.subscriptions.subscription.status.trialMessage')}`
+          return `${this.$t(
+            'account.subscriptions.subscription.status.trialMessage'
+          )}`
         default:
           return ''
       }

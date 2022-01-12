@@ -60,7 +60,10 @@
                 :value="'immediate'"
                 checked
               />
-              <label for="now" class="flex items-center label-sm cursor-pointer">
+              <label
+                for="now"
+                class="flex items-center label-sm cursor-pointer"
+              >
                 <span
                   class="
                     w-3
@@ -79,7 +82,10 @@
                 }}</label
               >
             </div>
-            <div v-if="(!paused && cycleSkippable) || paused" class="flex items-center">
+            <div
+              v-if="(!paused && cycleSkippable) || paused"
+              class="flex items-center"
+            >
               <input
                 id="cycle-time"
                 v-model="interval"
@@ -88,7 +94,10 @@
                 class="hidden"
                 :value="paused ? 'set' : 'skip-cycle'"
               />
-              <label for="cycle-time" class="flex items-center label-sm cursor-pointer">
+              <label
+                for="cycle-time"
+                class="flex items-center label-sm cursor-pointer"
+              >
                 <span
                   class="
                     w-3
