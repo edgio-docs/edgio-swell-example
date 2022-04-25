@@ -2023,12 +2023,12 @@
     lodash "^4.17.20"
     sirv-cli "^1.0.0"
 
-"@layer0/nuxt@4.8.3":
-  version "4.8.3"
-  resolved "https://registry.yarnpkg.com/@layer0/nuxt/-/nuxt-4.8.3.tgz#7bbcd0e263cffd934545d9f1ffee511fa5f51184"
-  integrity sha512-NWFj8d73WjbR4TirhGiaB/Q7yWfnlbNSe1fW9F59rUnQd1/UCnjWWxgzMJfQyVVxZCc/0Y92TxO9FtRupsMR2g==
+"@layer0/nuxt@4.13.8":
+  version "4.13.8"
+  resolved "https://registry.yarnpkg.com/@layer0/nuxt/-/nuxt-4.13.8.tgz#622cb894b3f7a534cadc04cd3d55f1c3786429d4"
+  integrity sha512-Hl8jIY2r20aNBo0bkCEaSdCiZbJcXO0K4BLSWDAzINv5sl+RY2T8lBh+xheNjoDybjFJfrmAaBeiZRRlXdMzxA==
   dependencies:
-    chalk "^3.0.0"
+    chalk "^4.1.2"
     content-type "^1.0.4"
     cross-spawn "^7.0.3"
     fs-extra "^8.1.0"
@@ -4276,15 +4276,7 @@ chalk@^3.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
-chalk@^4.0.0, chalk@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.1.tgz#c80b3fab28bf6371e6863325eee67e618b77e6ad"
-  integrity sha512-diHzdDKxcU+bAsUboHLPEDQiw0qEe0qd7SYUn3HgcFlWgbDcfLGswOHYeGrHKzG9z6UYf01d9VFMfZxPM1xZSg==
-  dependencies:
-    ansi-styles "^4.1.0"
-    supports-color "^7.1.0"
-
-chalk@^4.1.0, chalk@^4.1.2:
+chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
