@@ -2014,10 +2014,10 @@
     unixify "^1.0.0"
     uuid "^8.3.2"
 
-"@layer0/devtools@4.8.3":
-  version "4.8.3"
-  resolved "https://registry.yarnpkg.com/@layer0/devtools/-/devtools-4.8.3.tgz#c65d0a0c166e992acee01798938620730871b19a"
-  integrity sha512-YcNcWoquXDVV4v9JW1TKPx8BkTLjf+UVT0FntncQfc9lL2q1iwsV4QvVpdi9704Ve9NL3DQvdsS8xfSbtTt2Lw==
+"@layer0/devtools@4.13.8":
+  version "4.13.8"
+  resolved "https://registry.yarnpkg.com/@layer0/devtools/-/devtools-4.13.8.tgz#1caaebf545cc3d941704801df1fae0c21e2a42ee"
+  integrity sha512-d9xeULrIg6Hg8XOz5hJUspqvU9+JEiIawg59boH0vel6eSUogA0wzNaQP/M7iCxp6xMs7/ZI9dK0J8GDUpC/UQ==
   dependencies:
     clsx "^1.1.1"
     lodash "^4.17.20"
