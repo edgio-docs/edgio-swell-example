@@ -2052,10 +2052,10 @@
     workbox-routing "^5.1.2"
     workbox-strategies "^5.1.2"
 
-"@layer0/vue@4.8.3":
-  version "4.8.3"
-  resolved "https://registry.yarnpkg.com/@layer0/vue/-/vue-4.8.3.tgz#7d3f097d5560cde54f5917a652cd254b68e5ea0d"
-  integrity sha512-7MdYrmjmDckRJBG4Z8X6ZVw8iCNrfTt1NL5GhRegKuveUs4Q+4WfefrDhAuX0WwrL4G7d4wF+CUCI+5sKit1Ug==
+"@layer0/vue@4.13.9":
+  version "4.13.9"
+  resolved "https://registry.yarnpkg.com/@layer0/vue/-/vue-4.13.9.tgz#c85cfc5ebb78064356f367ae327656fee5a9e845"
+  integrity sha512-HWpqVVq23LHVZvpAU4OfpfOLIjRadlB+Mu75eLv7X/2eyox1ja8+lwbUpPFlf5Uf8vGvVHMGLTloX+b6SS4V4g==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
