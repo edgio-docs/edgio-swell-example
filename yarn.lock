@@ -2053,10 +2053,10 @@
     workbox-routing "^5.1.2"
     workbox-strategies "^5.1.2"
 
-"@layer0/vue@4.13.9":
-  version "4.13.9"
-  resolved "https://registry.yarnpkg.com/@layer0/vue/-/vue-4.13.9.tgz#c85cfc5ebb78064356f367ae327656fee5a9e845"
-  integrity sha512-HWpqVVq23LHVZvpAU4OfpfOLIjRadlB+Mu75eLv7X/2eyox1ja8+lwbUpPFlf5Uf8vGvVHMGLTloX+b6SS4V4g==
+"@layer0/vue@4.19.4":
+  version "4.19.4"
+  resolved "https://registry.yarnpkg.com/@layer0/vue/-/vue-4.19.4.tgz#79642897cc6ac027226f460dc7b06fbf493f7da6"
+  integrity sha512-DLwLVPDzIXpvVtFWQDDhqSdHMvXhPFTbpNIumj+0bdzLHHoIY/TfvNfKKaajPn65lBDgfUuUVQ9vxig4PJmTdQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
