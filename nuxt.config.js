@@ -107,7 +107,7 @@ export default async () => {
     ],
 
     buildModules: [
-      ['@layer0/nuxt/module', { layer0SourceMaps: true }],
+      ['@edgio/nuxt/module', { edgioSourceMaps: true }],
       [
         /*
          ** Generate dynamic routes for @nuxtjs/sitemap
